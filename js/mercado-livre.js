@@ -3,19 +3,19 @@ const produtosMercadoLivre = [
     {
         nome: "Cartão de memória",
         descricao: "Confira as características e opções disponíveis no anúncio.",
-        imagem: "imagens/cartao.webp",
+        imagem: "imagens/cartao4.webp",
         link: "https://meli.la/33aiKNy"
     },
     {
         nome: "Escova",
         descricao: "Confira os detalhes e as opções disponíveis no anúncio.",
-        imagem: "imagens/escova.webp",
+        imagem: "imagens/escova5.webp",
         link: "https://meli.la/1zQtbNw"
     },
     {
         nome: "Fone de ouvido sem fio",
         descricao: "Confira os detalhes e as opções disponíveis no anúncio.",
-        imagem: "imagens/fone.webp",
+        imagem: "imagens/fone6.webp",
         link: "https://meli.la/1JUVTrJ"
     }
 ];
