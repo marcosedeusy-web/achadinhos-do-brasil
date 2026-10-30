@@ -1,0 +1,4 @@
+/storage/installed.lock
+/uploads/*
+!/uploads/.gitkeep
+/config/local.php
