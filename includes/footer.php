@@ -1,0 +1,1 @@
+<footer class="site-footer"><div class="container">© <?= date('Y') ?> Achadinhos do Brasil · Ofertas da Shopee e do Mercado Livre</div></footer></body></html>
