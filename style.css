@@ -21,6 +21,17 @@ body {
 .topo h1 {
     font-size: 32px;
     margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.logo-sacolas {
+    width: 48px;
+    height: 40px;
+    flex: 0 0 auto;
+    vertical-align: middle;
 }
 
 .botao-admin-topo {
@@ -73,40 +84,6 @@ body {
     color: #123b67;
     background: #dceeff;
     border-left: 6px solid #3483fa;
-}
-
-.sacola {
-    display: inline-block;
-    position: relative;
-    width: 22px;
-    height: 20px;
-    margin-right: 8px;
-    vertical-align: -3px;
-    border-radius: 4px 4px 6px 6px;
-}
-
-.sacola::before {
-    content: "";
-    position: absolute;
-    width: 10px;
-    height: 8px;
-    left: 6px;
-    top: -6px;
-    border: 2px solid currentColor;
-    border-bottom: 0;
-    border-radius: 7px 7px 0 0;
-}
-
-.sacola-shopee {
-    background: #ffdf00;
-    color: #8a6d00;
-    border: 1px solid #d2ad00;
-}
-
-.sacola-mercado {
-    background: #3483fa;
-    color: #174b91;
-    border: 1px solid #2468c7;
 }
 
 .produtos {
@@ -202,6 +179,12 @@ footer {
 @media (max-width: 600px) {
     .topo h1 {
         font-size: 25px;
+        gap: 7px;
+    }
+
+    .logo-sacolas {
+        width: 40px;
+        height: 34px;
     }
 
     .botao-admin-topo {
