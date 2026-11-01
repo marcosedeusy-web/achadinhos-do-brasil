@@ -383,3 +383,37 @@ footer {
         pointer-events: auto;
     }
 }
+
+/* Controle explícito: descrição só aparece enquanto o mouse está na foto */
+.produto p {
+    display: none !important;
+    position: absolute;
+    z-index: 5;
+    top: 18px;
+    left: 18px;
+    right: 18px;
+    height: 210px;
+    max-height: none;
+    min-height: 0;
+    margin: 0;
+    padding: 14px;
+    overflow: auto;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    background: rgba(0, 77, 41, 0.95);
+    border-radius: 8px;
+    text-align: center;
+    line-height: 1.5;
+    opacity: 1;
+}
+
+.produto.descricao-visivel p {
+    display: flex !important;
+}
+
+@media (hover: none) {
+    .produto p {
+        display: none !important;
+    }
+}
