@@ -23,6 +23,22 @@ body {
     margin-bottom: 10px;
 }
 
+.botao-admin-topo {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 10px 18px;
+    border: 1px solid rgba(255,255,255,0.8);
+    border-radius: 8px;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.botao-admin-topo:hover {
+    background: rgba(255,255,255,0.15);
+}
+
 .banner {
     background: #fff;
     text-align: center;
@@ -42,9 +58,21 @@ body {
 }
 
 .titulo {
-    color: #006b35;
     font-size: 25px;
     margin-bottom: 25px;
+    padding: 14px 18px;
+    border-radius: 10px;
+}
+
+.titulo-shopee {
+    color: #222222;
+    background: #ffdf00;
+}
+
+.titulo-mercado {
+    color: #123b67;
+    background: #dceeff;
+    border-left: 6px solid #3483fa;
 }
 
 .produtos {
@@ -119,6 +147,15 @@ body {
     margin-top: 50px;
 }
 
+#produtos-mercado-livre .produto a {
+    background: #3483fa;
+    color: #ffffff;
+}
+
+#produtos-mercado-livre .produto a:hover {
+    background: #2468c7;
+}
+
 footer {
     background: #004d29;
     color: white;
@@ -131,6 +168,14 @@ footer {
 @media (max-width: 600px) {
     .topo h1 {
         font-size: 25px;
+    }
+
+    .botao-admin-topo {
+        margin-top: 14px;
+    }
+
+    .titulo {
+        font-size: 21px;
     }
 
     .banner h2 {
