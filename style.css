@@ -384,36 +384,35 @@ footer {
     }
 }
 
-/* Controle explícito: descrição só aparece enquanto o mouse está na foto */
+/* Descrição aparece abaixo da imagem, sem cobrir o produto */
+.produto .imagem-produto-link { order: 1; }
+.produto h3 { order: 2; }
 .produto p {
     display: none !important;
-    position: absolute;
-    z-index: 5;
-    top: 18px;
-    left: 18px;
-    right: 18px;
-    height: 210px;
+    position: static;
+    order: 3;
+    width: 100%;
+    height: auto;
     max-height: none;
     min-height: 0;
-    margin: 0;
-    padding: 14px;
-    overflow: auto;
-    align-items: center;
-    justify-content: center;
-    color: #ffffff;
-    background: rgba(0, 77, 41, 0.95);
+    margin: 0 0 12px;
+    padding: 10px 12px;
+    overflow: visible;
+    color: #334238;
+    background: #eef6f0;
     border-radius: 8px;
-    text-align: center;
+    text-align: left;
     line-height: 1.5;
     opacity: 1;
+    pointer-events: auto;
 }
-
 .produto.descricao-visivel p {
-    display: flex !important;
+    display: block !important;
 }
+.produto strong { order: 4; }
+.produto small { order: 5; }
+.produto > a:not(.imagem-produto-link) { order: 6; }
 
 @media (hover: none) {
-    .produto p {
-        display: none !important;
-    }
+    .produto p { display: none !important; }
 }
