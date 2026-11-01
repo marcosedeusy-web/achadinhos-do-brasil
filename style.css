@@ -211,3 +211,22 @@ footer {
         padding: 25px 14px;
     }
 }
+
+/* Cores dos botões dos produtos cadastrados no painel */
+#produtos-painel-online .produto-mercado-livre a {
+    background: #ffe600;
+    color: #222222;
+}
+
+#produtos-painel-online .produto-mercado-livre a:hover {
+    background: #e6cf00;
+}
+
+#produtos-painel-online .produto-shopee a {
+    background: #ee4d2d;
+    color: #ffffff;
+}
+
+#produtos-painel-online .produto-shopee a:hover {
+    background: #d73211;
+}
