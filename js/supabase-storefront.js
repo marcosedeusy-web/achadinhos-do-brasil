@@ -103,6 +103,7 @@
 
                 const linkNormalizado = (produto.link_afiliado || "").replace(/\/$/, "");
                 const ehAntigo = linksAntigos.has(linkNormalizado);
+
                 if (ehAntigo) {
                     document.querySelectorAll(".produtos a[href]").forEach(linkAntigo => {
                         if (linkAntigo.href.replace(/\/$/, "") === linkNormalizado) {
@@ -110,8 +111,13 @@
                             if (cartaoAntigo) cartaoAntigo.remove();
                         }
                     });
-                    const destino = loja.includes("mercado") ? secaoMercado : secaoShopee;
-                    if (destino) destino.appendChild(card);
+                }
+
+                // Organiza todos os produtos pela plataforma, não apenas os links antigos.
+                if (loja.includes("mercado")) {
+                    secaoMercado.appendChild(card);
+                } else if (loja.includes("shopee")) {
+                    secaoShopee.appendChild(card);
                 } else {
                     area.appendChild(card);
                 }
