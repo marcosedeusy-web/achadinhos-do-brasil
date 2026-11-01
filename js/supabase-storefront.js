@@ -34,7 +34,8 @@
 
         data.forEach((produto) => {
             const card = document.createElement("article");
-            card.className = "produto";
+            const loja = String(produto.plataforma || "").toLowerCase();
+            card.className = "produto " + (loja.includes("mercado") ? "produto-mercado-livre" : "produto-shopee");
 
             if (produto.imagem_url) {
                 const imagem = document.createElement("img");
