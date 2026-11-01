@@ -68,7 +68,7 @@
                 link.href = produto.link_afiliado;
                 link.target = "_blank";
                 link.rel = "noopener noreferrer";
-                link.textContent = "🛒 Ver oferta";
+                link.textContent = loja.includes("mercado") ? "🛒 Ver oferta no Mercado Livre" : loja.includes("shopee") ? "🛒 Ver oferta na Shopee" : "🛒 Ver oferta";
                 card.appendChild(link);
             }
 
