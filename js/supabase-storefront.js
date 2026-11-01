@@ -2,12 +2,25 @@
 // Não altera nem substitui os produtos estáticos da Shopee ou do Mercado Livre.
 (() => {
     const area = document.getElementById("produtos-painel-online");
-    if (!area || !window.supabase || !window.SUPABASE_URL || !window.SUPABASE_PUBLISHABLE_KEY) return;
+    if (!area) return;
 
-    const client = window.supabase.createClient(
-        window.SUPABASE_URL,
-        window.SUPABASE_PUBLISHABLE_KEY
-    );
+    if (!window.supabase || !window.SUPABASE_URL || !window.SUPABASE_PUBLISHABLE_KEY) {
+        area.textContent = "Não foi possível conectar à vitrine agora. Tente atualizar a página.";
+        console.error("Supabase não carregou: confira a biblioteca e a configuração.");
+        return;
+    }
+
+    let client;
+    try {
+        client = window.supabase.createClient(
+            window.SUPABASE_URL,
+            window.SUPABASE_PUBLISHABLE_KEY
+        );
+    } catch (erro) {
+        area.textContent = "Não foi possível conectar à vitrine agora. Tente atualizar a página.";
+        console.error("Erro ao iniciar o Supabase:", erro);
+        return;
+    }
 
     const dinheiro = (valor) => {
         if (valor === null || valor === undefined || valor === "") return "Consulte o preço";
@@ -15,24 +28,30 @@
     };
 
     async function carregarProdutos() {
-        const { data, error } = await client
-            .from("produtos")
-            .select("id,nome,descricao,preco,imagem_url,link_afiliado,plataforma")
-            .eq("ativo", true)
-            .order("criado_em", { ascending: false });
+        try {
+            const consulta = await Promise.race([
+                client
+                    .from("produtos")
+                    .select("id,nome,descricao,preco,imagem_url,link_afiliado,plataforma")
+                    .eq("ativo", true)
+                    .order("criado_em", { ascending: false }),
+                new Promise((_, reject) => setTimeout(() => reject(new Error("Tempo de conexão esgotado")), 12000))
+            ]);
+            const { data, error } = consulta;
 
-        if (error) {
-            area.textContent = "Não foi possível carregar os produtos agora.";
-            console.error("Erro ao carregar produtos do painel:", error);
-            return;
-        }
+            if (error) {
+                area.textContent = "Não foi possível carregar os produtos agora. Tente novamente mais tarde.";
+                console.error("Erro ao carregar produtos do painel:", error);
+                return;
+            }
 
-        if (!data || data.length === 0) {
-            area.textContent = "Em breve, novos achadinhos por aqui!";
-            return;
-        }
+            if (!data || data.length === 0) {
+                area.textContent = "Em breve, novos achadinhos por aqui!";
+                return;
+            }
 
-        data.forEach((produto) => {
+            area.innerHTML = "";
+            data.forEach((produto) => {
             const card = document.createElement("article");
             const loja = String(produto.plataforma || "").toLowerCase();
             card.className = "produto " + (loja.includes("mercado") ? "produto-mercado-livre" : "produto-shopee");
@@ -70,8 +89,12 @@
                 card.appendChild(link);
             }
 
-            area.appendChild(card);
-        });
+                area.appendChild(card);
+            });
+        } catch (erro) {
+            area.textContent = "Não foi possível carregar os produtos agora. Tente atualizar a página.";
+            console.error("Falha na conexão com a vitrine:", erro);
+        }
     }
 
     carregarProdutos();
