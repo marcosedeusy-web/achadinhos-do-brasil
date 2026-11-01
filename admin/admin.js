@@ -26,8 +26,14 @@
     if(!currentUser||currentUser.id!==ADMIN_ID)return message("Acesso não autorizado.",true);
     const id=$("product-id").value;
     const row={nome:$("nome").value.trim(),descricao:$("descricao").value.trim(),preco:$("preco").value===""?null:Number($("preco").value),link_afiliado:$("link").value.trim(),plataforma:$("plataforma").value,ativo:$("ativo").checked};
-    if(!/^https?:\/\//i.test(row.link_afiliado))return message("Informe um link de afiliado válido.",true);
-    const file=$("imagem").files[0]; message("Salvando produto...");
+    if(!/^https:\/\//i.test(row.link_afiliado))return message("Informe um link de afiliado seguro (https://).",true);
+    const file=$("imagem").files[0];
+    if(file){
+      const tiposPermitidos=["image/jpeg","image/png","image/webp","image/gif"];
+      if(!tiposPermitidos.includes(file.type))return message("Formato de imagem não permitido. Use JPG, PNG, WEBP ou GIF.",true);
+      if(file.size>5*1024*1024)return message("A imagem deve ter no máximo 5 MB.",true);
+    }
+    message("Salvando produto...");
     let oldImage=null;
     if(id){const old=await client.from("produtos").select("imagem_url").eq("id",id).single();if(old.error)return message("Erro ao localizar produto: "+old.error.message,true);oldImage=old.data.imagem_url;}
     if(file){
