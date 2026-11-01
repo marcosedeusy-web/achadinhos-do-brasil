@@ -1,4 +1,4 @@
-
+ 
 * {
     margin: 0;
     padding: 0;
@@ -88,6 +88,34 @@ body {
     border-left: 0 !important;
     outline: 0 !important;
     box-shadow: none !important;
+}
+
+.titulo-mercado-cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.titulo-mercado-cabecalho h2 {
+    font-size: inherit;
+    line-height: 1.2;
+}
+
+.titulo-mercado-cabecalho a {
+    flex: 0 0 auto;
+    display: inline-block;
+    background: #222222;
+    color: #ffe600;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 9px 13px;
+    border-radius: 7px;
+}
+
+.titulo-mercado-cabecalho a:hover {
+    background: #444444;
 }
 
 .produtos {
@@ -203,6 +231,16 @@ footer {
         font-size: 21px;
     }
 
+    .titulo-mercado-cabecalho {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .titulo-mercado-cabecalho a {
+        font-size: 12px;
+    }
+
     .banner h2 {
         font-size: 22px;
     }
@@ -230,5 +268,3 @@ footer {
 #produtos-painel-online .produto-shopee a:hover {
     background: #d73211;
 }
-
-
