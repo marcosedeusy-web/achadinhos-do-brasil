@@ -239,18 +239,41 @@ footer {
     align-items: center;
     gap: 12px;
 }
+.titulo-shopee,
+.titulo-mercado {
+    gap: 8px;
+    font-size: 22px;
+    min-width: 0;
+}
 .marca-titulo {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    flex: 0 0 48px;
-    width: 48px;
-    height: 42px;
-    border-radius: 8px;
+    flex: 0 0 32px;
+    width: 32px;
+    height: 30px;
+    border-radius: 6px;
     background: rgba(255,255,255,0.95);
 }
 .marca-titulo svg {
     display: block;
-    width: 40px;
-    height: 36px;
+    width: 27px;
+    height: 25px;
+}
+@media (max-width: 600px) {
+    .titulo-shopee,
+    .titulo-mercado {
+        font-size: 18px;
+        gap: 7px;
+        padding: 11px 12px;
+    }
+    .marca-titulo {
+        flex-basis: 27px;
+        width: 27px;
+        height: 26px;
+    }
+    .marca-titulo svg {
+        width: 23px;
+        height: 21px;
+    }
 }
