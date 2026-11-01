@@ -94,7 +94,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 14px;
+    flex-direction: row-reverse;
+    gap: 8px;
 }
 
 .titulo-mercado-cabecalho h2 {
@@ -108,9 +109,9 @@ body {
     background: #222222;
     color: #ffe600;
     text-decoration: none;
-    font-size: 13px;
+    font-size: 11px;
     font-weight: bold;
-    padding: 9px 13px;
+    padding: 6px 9px;
     border-radius: 7px;
 }
 
