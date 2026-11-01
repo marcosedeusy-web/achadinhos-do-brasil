@@ -73,7 +73,17 @@
                 imagem.src = produto.imagem_url;
                 imagem.alt = produto.nome || "Produto";
                 imagem.loading = "lazy";
-                card.appendChild(imagem);
+                if (produto.link_afiliado) {
+                    const linkImagem = document.createElement("a");
+                    linkImagem.className = "imagem-produto-link";
+                    linkImagem.href = produto.link_afiliado;
+                    linkImagem.target = "_blank";
+                    linkImagem.rel = "noopener noreferrer";
+                    linkImagem.appendChild(imagem);
+                    card.appendChild(linkImagem);
+                } else {
+                    card.appendChild(imagem);
+                }
             }
 
             const titulo = document.createElement("h3");
