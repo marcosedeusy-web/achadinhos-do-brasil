@@ -32,6 +32,13 @@ if (areaProdutos) {
         imagem.alt = produto.nome;
         imagem.loading = "lazy";
 
+        const linkImagem = document.createElement("a");
+        linkImagem.className = "imagem-produto-link";
+        linkImagem.href = produto.link;
+        linkImagem.target = "_blank";
+        linkImagem.rel = "noopener noreferrer";
+        linkImagem.appendChild(imagem);
+
         const titulo = document.createElement("h3");
         titulo.textContent = produto.nome;
 
@@ -45,7 +52,7 @@ if (areaProdutos) {
         botao.href = produto.link;
         botao.textContent = "🛒 Ver Ofertas do Mercado Livre";
 
-        card.append(imagem, titulo, descricao, preco, botao);
+        card.append(linkImagem, titulo, descricao, preco, botao);
         areaProdutos.appendChild(card);
     });
 }
