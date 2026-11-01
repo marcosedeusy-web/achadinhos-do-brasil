@@ -27,8 +27,10 @@
             b.type = "button"; b.textContent = texto; b.disabled = !!desabilitado;
             if (ativo) b.className = "pagina-ativa";
             b.addEventListener("click", () => {
-                estado.pagina = pagina; atualizar(secao);
-                secao.scrollIntoView({ behavior: "smooth", block: "start" });
+                const posicaoAtual = window.scrollY;
+                estado.pagina = pagina;
+                atualizar(secao);
+                window.scrollTo(0, posicaoAtual);
             });
             controles.appendChild(b);
         };
