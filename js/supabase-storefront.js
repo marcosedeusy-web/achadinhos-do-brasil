@@ -101,11 +101,11 @@
                 card.appendChild(link);
             }
 
-                const linkNormalizado = (produto.link_afiliado || "").replace(/\\/$/, "");
+                const linkNormalizado = (produto.link_afiliado || "").replace(/\/$/, "");
                 const ehAntigo = linksAntigos.has(linkNormalizado);
                 if (ehAntigo) {
                     document.querySelectorAll(".produtos a[href]").forEach(linkAntigo => {
-                        if (linkAntigo.href.replace(/\\/$/, "") === linkNormalizado) {
+                        if (linkAntigo.href.replace(/\/$/, "") === linkNormalizado) {
                             const cartaoAntigo = linkAntigo.closest(".produto");
                             if (cartaoAntigo) cartaoAntigo.remove();
                         }
