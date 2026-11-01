@@ -437,3 +437,55 @@ footer {
 }
 .produto small { order: 5; }
 .produto > a:not(.imagem-produto-link) { order: 6; }
+
+/* Ajuste específico dos cartões do Mercado Livre */
+#produtos-mercado-livre .produto,
+#produtos-painel-online .produto-mercado-livre {
+    display: flex;
+    flex-direction: column;
+}
+#produtos-mercado-livre .produto > .imagem-produto-link,
+#produtos-painel-online .produto-mercado-livre > .imagem-produto-link {
+    order: 1;
+    flex: 0 0 210px;
+}
+#produtos-mercado-livre .produto > h3,
+#produtos-painel-online .produto-mercado-livre > h3 {
+    order: 2;
+}
+#produtos-mercado-livre .produto > strong,
+#produtos-painel-online .produto-mercado-livre > strong {
+    order: 3;
+    display: block;
+    position: static;
+    margin: 0 0 8px;
+    flex: 0 0 auto;
+}
+#produtos-mercado-livre .produto > p,
+#produtos-painel-online .produto-mercado-livre > p {
+    order: 4;
+    display: none !important;
+    position: static !important;
+    flex: 0 0 auto;
+    width: 100%;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
+    margin: 0 0 12px;
+    padding: 10px 12px;
+    overflow: visible;
+    color: #334238;
+    background: #eef6f0;
+    border-radius: 8px;
+    opacity: 1;
+    text-align: left;
+    pointer-events: auto;
+}
+#produtos-mercado-livre .produto.descricao-visivel > p,
+#produtos-painel-online .produto-mercado-livre.descricao-visivel > p {
+    display: block !important;
+}
+#produtos-mercado-livre .produto > a:not(.imagem-produto-link),
+#produtos-painel-online .produto-mercado-livre > a:not(.imagem-produto-link) {
+    order: 5;
+}
