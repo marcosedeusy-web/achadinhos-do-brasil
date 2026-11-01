@@ -42,6 +42,41 @@
     if(file&&oldImage){const marker="/storage/v1/object/public/produtos/";const at=oldImage.indexOf(marker);if(at>=0)await client.storage.from("produtos").remove([decodeURIComponent(oldImage.slice(at+marker.length))]);}
     reset();message("Produto salvo com sucesso.");loadProducts();
   });
+
+  $("import-old-products").addEventListener("click", async () => {
+    if (!currentUser || currentUser.id !== ADMIN_ID) return message("Acesso não autorizado.", true);
+    const antigos = [
+      {nome:"Mini Power Bank Portátil",descricao:"Carregador portátil compacto. Confira as capacidades, cores e conexões disponíveis no anúncio.",preco:31.99,plataforma:"Shopee",link_afiliado:"https://s.shopee.com.br/30p7lRG6Ku",imagem_url:"https://marcosedeusy-web.github.io/achadinhos-do-brasil/imagens/foto1.jpg"},
+      {nome:"Kit Body Splash Árabe Shakan",descricao:"Fragrâncias variadas em frascos de 60 ml. Confira as opções individuais e os kits disponíveis.",preco:14.89,plataforma:"Shopee",link_afiliado:"https://s.shopee.com.br/40hexzGWHO",imagem_url:"https://marcosedeusy-web.github.io/achadinhos-do-brasil/imagens/foto2.webp"},
+      {nome:"Fone de Ouvido Bluetooth 760BT",descricao:"Fone sem fio com microfone, formato over-ear e diferentes opções de cores.",preco:38.55,plataforma:"Shopee",link_afiliado:"https://s.shopee.com.br/2gCHMwwXTq",imagem_url:"https://marcosedeusy-web.github.io/achadinhos-do-brasil/imagens/foto3.webp"},
+      {nome:"Árvore de Natal 1,50 m — 400 Galhos",descricao:"Árvore verde desmontável para decorar casas, lojas e escritórios. Opções com pé de ferro ou plástico.",preco:79.99,plataforma:"Shopee",link_afiliado:"https://s.shopee.com.br/30p7lbUPuf",imagem_url:"https://marcosedeusy-web.github.io/achadinhos-do-brasil/imagens/foto4.jpg"},
+      {nome:"Cartão de memória",descricao:"Confira as características e opções disponíveis no anúncio.",preco:null,plataforma:"Mercado Livre",link_afiliado:"https://meli.la/33aiKNy",imagem_url:"https://marcosedeusy-web.github.io/achadinhos-do-brasil/imagens/cartao4.webp"},
+      {nome:"Escova",descricao:"Confira os detalhes e as opções disponíveis no anúncio.",preco:null,plataforma:"Mercado Livre",link_afiliado:"https://meli.la/1zQtbNw",imagem_url:"https://marcosedeusy-web.github.io/achadinhos-do-brasil/imagens/escova5.webp"},
+      {nome:"Fone de ouvido sem fio",descricao:"Confira os detalhes e as opções disponíveis no anúncio.",preco:null,plataforma:"Mercado Livre",link_afiliado:"https://meli.la/1JUVTrJ",imagem_url:"https://marcosedeusy-web.github.io/achadinhos-do-brasil/imagens/fone6.webp"}
+    ];
+    const button = $("import-old-products");
+    button.disabled = true;
+    message("Verificando produtos antigos...");
+    try {
+      const existing = await client.from("produtos").select("link_afiliado");
+      if (existing.error) throw existing.error;
+      const links = new Set((existing.data || []).map(item => item.link_afiliado));
+      const novos = antigos.filter(item => !links.has(item.link_afiliado)).map(item => ({...item, ativo:true}));
+      if (!novos.length) {
+        message("Os produtos antigos já estão todos cadastrados.");
+      } else {
+        const result = await client.from("produtos").insert(novos);
+        if (result.error) throw result.error;
+        message(novos.length + " produtos antigos importados com sucesso. Agora você pode editar ou excluir cada um.");
+      }
+      await loadProducts();
+    } catch (error) {
+      message("Não foi possível importar os produtos: " + (error.message || "erro desconhecido"), true);
+    } finally {
+      button.disabled = false;
+    }
+  });
+
   async function loadProducts(){
     const result=await client.from("produtos").select("*").order("criado_em",{ascending:false});
     if(result.error)return message("Erro ao carregar produtos: "+result.error.message,true);
