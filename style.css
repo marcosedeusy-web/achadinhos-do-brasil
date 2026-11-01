@@ -19,17 +19,18 @@ body {
 }
 
 .topo h1 {
-    font-size: 32px;
+    font-size: clamp(21px, 3vw, 29px);
+    line-height: 1.2;
     margin-bottom: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 7px;
 }
 
 .logo-sacolas {
-    width: 48px;
-    height: 40px;
+    width: 34px;
+    height: 29px;
     flex: 0 0 auto;
     vertical-align: middle;
 }
@@ -177,14 +178,18 @@ footer {
 }
 
 @media (max-width: 600px) {
+    .topo {
+        padding: 24px 12px;
+    }
+
     .topo h1 {
-        font-size: 25px;
-        gap: 7px;
+        font-size: 20px;
+        gap: 5px;
     }
 
     .logo-sacolas {
-        width: 40px;
-        height: 34px;
+        width: 29px;
+        height: 25px;
     }
 
     .botao-admin-topo {
