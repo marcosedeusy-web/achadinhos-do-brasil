@@ -275,3 +275,22 @@ footer {
 #produtos-painel-online .produto-shopee a:hover {
     background: #d73211;
 }
+
+
+.produto[hidden] { display: none !important; }
+.paginacao-produtos {
+    display: flex; align-items: center; justify-content: center;
+    flex-wrap: wrap; gap: 8px; margin: 22px 0 42px;
+}
+.paginacao-produtos[hidden] { display: none !important; }
+.paginacao-produtos button {
+    min-width: 38px; padding: 9px 12px; border: 1px solid #006b35;
+    border-radius: 7px; background: #fff; color: #006b35;
+    font-weight: bold; cursor: pointer;
+}
+.paginacao-produtos button.pagina-ativa { background: #006b35; color: #fff; }
+.paginacao-produtos button:disabled { opacity: .4; cursor: not-allowed; }
+@media (max-width: 600px) {
+    .paginacao-produtos { gap: 6px; }
+    .paginacao-produtos button { min-width: 34px; padding: 8px 10px; }
+}
