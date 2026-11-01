@@ -416,3 +416,24 @@ footer {
 @media (hover: none) {
     .produto p { display: none !important; }
 }
+
+/* Mantém o preço sempre visível antes do texto expandido */
+.produto strong {
+    order: 3;
+    position: relative;
+    z-index: 1;
+    display: block;
+    margin-top: 0;
+}
+.produto p {
+    order: 4;
+    position: static !important;
+    width: 100%;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
+    flex: 0 0 auto;
+    clear: both;
+}
+.produto small { order: 5; }
+.produto > a:not(.imagem-produto-link) { order: 6; }
