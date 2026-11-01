@@ -6,7 +6,7 @@
             const card = imagem.closest(".produto");
             if (!card) return;
             imagem.addEventListener("mouseenter", () => card.classList.add("descricao-visivel"));
-            imagem.addEventListener("mouseleave", () => card.classList.remove("descricao-visivel"));
+            card.addEventListener("mouseleave", () => card.classList.remove("descricao-visivel"));
             imagem.addEventListener("focus", () => card.classList.add("descricao-visivel"));
             imagem.addEventListener("blur", () => card.classList.remove("descricao-visivel"));
         });
