@@ -133,6 +133,7 @@
                 }
             });
             if (!area.children.length) area.textContent = "Em breve, novos achadinhos por aqui!";
+            window.dispatchEvent(new Event("produtos-atualizados"));
         } catch (erro) {
             area.textContent = "Não foi possível carregar os produtos agora. Tente atualizar a página.";
             console.error("Falha na conexão com a vitrine:", erro);
