@@ -43,8 +43,6 @@ if (areaProdutos) {
 
         const botao = document.createElement("a");
         botao.href = produto.link;
-        botao.target = "_blank";
-        botao.rel = "noopener noreferrer";
         botao.textContent = "🛒 Ver Ofertas do Mercado Livre";
 
         card.append(imagem, titulo, descricao, preco, botao);
