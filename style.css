@@ -141,8 +141,8 @@ body {
 
 .produto a {
     display: block;
-    background: #ffdf00;
-    color: #222;
+    background: #ee4d2d;
+    color: #ffffff;
     text-decoration: none;
     text-align: center;
     padding: 13px 10px;
@@ -152,7 +152,7 @@ body {
 }
 
 .produto a:hover {
-    background: #f3c900;
+    background: #d73211;
 }
 
 .mercado {
@@ -160,12 +160,12 @@ body {
 }
 
 #produtos-mercado-livre .produto a {
-    background: #3483fa;
-    color: #ffffff;
+    background: #ffe600;
+    color: #222222;
 }
 
 #produtos-mercado-livre .produto a:hover {
-    background: #2468c7;
+    background: #e6cf00;
 }
 
 footer {
