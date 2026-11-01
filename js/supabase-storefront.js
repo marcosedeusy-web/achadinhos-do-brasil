@@ -50,6 +50,13 @@
                 return;
             }
 
+            const linksImportados = new Set(data.map(produto => produto.link_afiliado).filter(Boolean));
+            document.querySelectorAll(".produtos a[href]").forEach(link => {
+                if (linksImportados.has(link.href)) {
+                    const cartaoAntigo = link.closest(".produto");
+                    if (cartaoAntigo) cartaoAntigo.remove();
+                }
+            });
             area.innerHTML = "";
             data.forEach((produto) => {
             const card = document.createElement("article");
