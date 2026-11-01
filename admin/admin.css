@@ -6,3 +6,5 @@
 .botao-importar:hover{background:#12558b}
 .botao-importar:disabled{opacity:.6;cursor:wait}
 @media(max-width:620px){.importacao-antigos{align-items:stretch}.botao-importar{width:100%}}
+
+.importacao-antigos{margin:20px 0 24px;padding:20px;border:2px solid #00833f;border-radius:12px;background:#f5faf6}.importacao-antigos h2{margin:0 0 6px}.importacao-antigos p{margin:0 0 12px}.botao-importar{background:#1769aa}.botao-importar:hover{background:#12558b}
