@@ -50,15 +50,20 @@
                 return;
             }
 
-            const linksImportados = new Set(data.map(produto => produto.link_afiliado).filter(Boolean));
-            document.querySelectorAll(".produtos a[href]").forEach(link => {
-                if (linksImportados.has(link.href)) {
-                    const cartaoAntigo = link.closest(".produto");
-                    if (cartaoAntigo) cartaoAntigo.remove();
-                }
-            });
             area.innerHTML = "";
+            const secaoShopee = document.querySelector(".titulo-shopee + .produtos");
+            const secaoMercado = document.getElementById("produtos-mercado-livre");
+            const linksAntigos = new Set([
+                "https://s.shopee.com.br/30p7lRG6Ku",
+                "https://s.shopee.com.br/40hexzGWHO",
+                "https://s.shopee.com.br/2gCHMwwXTq",
+                "https://s.shopee.com.br/30p7lbUPuf",
+                "https://meli.la/33aiKNy",
+                "https://meli.la/1zQtbNw",
+                "https://meli.la/1JUVTrJ"
+            ]);
             data.forEach((produto) => {
+
             const card = document.createElement("article");
             const loja = String(produto.plataforma || "").toLowerCase();
             card.className = "produto " + (loja.includes("mercado") ? "produto-mercado-livre" : "produto-shopee");
@@ -96,8 +101,22 @@
                 card.appendChild(link);
             }
 
-                area.appendChild(card);
+                const linkNormalizado = (produto.link_afiliado || "").replace(/\\/$/, "");
+                const ehAntigo = linksAntigos.has(linkNormalizado);
+                if (ehAntigo) {
+                    document.querySelectorAll(".produtos a[href]").forEach(linkAntigo => {
+                        if (linkAntigo.href.replace(/\\/$/, "") === linkNormalizado) {
+                            const cartaoAntigo = linkAntigo.closest(".produto");
+                            if (cartaoAntigo) cartaoAntigo.remove();
+                        }
+                    });
+                    const destino = loja.includes("mercado") ? secaoMercado : secaoShopee;
+                    if (destino) destino.appendChild(card);
+                } else {
+                    area.appendChild(card);
+                }
             });
+            if (!area.children.length) area.textContent = "Em breve, novos achadinhos por aqui!";
         } catch (erro) {
             area.textContent = "Não foi possível carregar os produtos agora. Tente atualizar a página.";
             console.error("Falha na conexão com a vitrine:", erro);
