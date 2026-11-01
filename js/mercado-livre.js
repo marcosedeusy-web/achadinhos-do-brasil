@@ -45,7 +45,7 @@ if (areaProdutos) {
         botao.href = produto.link;
         botao.target = "_blank";
         botao.rel = "noopener noreferrer";
-        botao.textContent = "🛒 Ver oferta no Mercado Livre";
+        botao.textContent = "🛒 Ver Ofertas do Mercado Livre";
 
         card.append(imagem, titulo, descricao, preco, botao);
         areaProdutos.appendChild(card);
