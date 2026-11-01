@@ -77,13 +77,17 @@ body {
 }
 
 .titulo-shopee {
-    color: #222222;
-    background: #ffdf00;
+    color: #ffffff;
+    background: #ee4d2d;
 }
 
 .titulo-mercado {
     color: #123b67;
     background: #ffe600;
+    border: 0 !important;
+    border-left: 0 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
 }
 
 .produtos {
