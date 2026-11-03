@@ -12,6 +12,12 @@ add constraint produtos_categoria_check
 check (categoria in (
   'pets',
   'eletronicos',
+  'eletrodomesticos',
+  'informatica',
+  'auto_acessorios',
+  'acessorios',
+  'papelaria',
+  'saude',
   'casa',
   'beleza',
   'moda',
