@@ -17,6 +17,22 @@
 
     function identificarCategoria(card) {
         const texto = normalizar(card.innerText || card.textContent);
+
+        // Pets: inclui areia, ração, higiene e acessórios para animais.
+        if (/areia para gatos|areia higienica|granulado higienico|racao|petisco|brinquedo para (cao|cachorro|gato)|cama para (cao|cachorro|gato)|coleira|guia para cachorro|arranhador|tapete higienico|comedouro|bebedouro|pet shop|pets?/.test(texto)) return "pets";
+
+        // Ferramentas e materiais para reparos.
+        if (/furadeira|parafusadeira|chave de fenda|chave philips|alicate|martelo|serra|broca|trena|ferramenta|kit ferramentas|nivelador|solda/.test(texto)) return "ferramentas";
+
+        // Acessórios e cuidados automotivos.
+        if (/automotivo|carro|moto|motocicleta|veicular|veiculo|pneu|calibrador|compressor automotivo|suporte para celular de carro|capa para banco|tapete automotivo|lampada automotiva/.test(texto)) return "automotivos";
+
+        // Brinquedos, jogos e atividades infantis.
+        if (/brinquedo|boneca|boneco|pelucia|lego|quebra cabeca|tabuleiro|jogo infantil|infantil|massinha/.test(texto)) return "brinquedos";
+
+        // Esportes, treino e atividades ao ar livre.
+        if (/esporte|academia|halter|peso de musculacao|tapete de yoga|yoga|bicicleta|bola de futebol|bola de volei|fitness|treino|camping|pesca/.test(texto)) return "esportes";
+
         if (/fone|audio|bluetooth|carregador|power bank|memoria|cartao|celular|smartphone|eletron|cabo|relogio inteligente|informatica|camera/.test(texto)) return "eletronicos";
         if (/cozinha|batedeira|panela|casa|decor|arvore de natal|limpeza|escova de limpeza|utensilio|organizador/.test(texto)) return "casa";
         if (/perfume|body splash|beleza|maquiagem|pele|cabelo|cosmetico|escova para uso diario/.test(texto)) return "beleza";
