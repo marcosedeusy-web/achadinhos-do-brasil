@@ -4,7 +4,7 @@
 
     function atualizar(secao) {
         if (!secao) return;
-        const produtos = Array.from(secao.children).filter(el => el.classList.contains("produto"));
+        const produtos = Array.from(secao.children).filter(el => el.classList.contains("produto") && !el.classList.contains("filtro-oculto"));
         let controles = secao.nextElementSibling;
         if (!controles || !controles.classList.contains("paginacao-produtos")) {
             controles = document.createElement("nav");
@@ -44,5 +44,6 @@
     }
     document.addEventListener("DOMContentLoaded", atualizarTodas);
     window.addEventListener("produtos-atualizados", atualizarTodas);
+    window.addEventListener("filtros-alterados", atualizarTodas);
     atualizarTodas();
 })();
