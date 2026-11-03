@@ -97,13 +97,27 @@
   }
   $("analisar-lista-mercado-livre").addEventListener("click",async()=>{
     if(!currentUser||currentUser.id!==ADMIN_ID)return message("Acesso não autorizado.",true);
-    const raw=$("lista-links-mercado-livre").value;
-    const urls=[...new Set((raw.match(/https?:\/\/[^\s<>"']+/gi)||[]).map(u=>u.replace(/[),.;]+$/,"")))];
-    const validos=urls.filter(u=>/^https:\/\/(?:meli\.la|www\.mercadolivre\.com\.br|mercadolivre\.com\.br)\//i.test(u));
-    if(!validos.length)return statusImportacaoLista("Cole links de produtos do Mercado Livre, um por linha. Use links de afiliado para manter sua comissão.",true);
-    if(validos.length>40)return statusImportacaoLista("Analise no máximo 40 links por vez.",true);
-    produtosListaML.length=0; $("previa-lista-mercado-livre").replaceChildren();
+    const raw=$("lista-links-mercado-livre").value.trim();
+    const urls=[...new Set((raw.match(/https?:\\/\\/[^\\s<>"']+/gi)||[]).map(u=>u.replace(/[),.;]+$/,"")))];
+    let validos=urls.filter(u=>/^https:\\/\\/(?:meli\\.la|www\\.mercadolivre\\.com\\.br|mercadolivre\\.com\\.br)\\//i.test(u));
+    if(!validos.length)return statusImportacaoLista("Cole o link da lista de recomendações ou links de produtos do Mercado Livre.",true);
     const botao=$("analisar-lista-mercado-livre");botao.disabled=true;
+    try {
+      if(validos.length===1 && /(?:mercadolivre\\.com\\.br\\/social\\/|meli\\.la\\/)/i.test(validos[0])) {
+        statusImportacaoLista("Lendo sua lista de recomendações do Mercado Livre...");
+        const {data,error}=await client.functions.invoke("mercado-livre-lista",{body:{url:validos[0]}});
+        if(error)throw new Error(error.message||"Não foi possível ler a lista.");
+        if(!data?.success)throw new Error(data?.error||"A lista não pôde ser lida.");
+        validos=(data.produtos||[]).map(p=>p.url).filter(Boolean);
+        if(!validos.length)throw new Error(data.aviso||"Nenhum produto foi encontrado na lista.");
+      }
+    } catch(error) {
+      statusImportacaoLista("Não foi possível ler a lista: "+(error.message||"erro desconhecido"),true);
+      botao.disabled=false;
+      return;
+    }
+    if(validos.length>40){statusImportacaoLista("A lista contém mais de 40 links. Analise no máximo 40 por vez.",true);botao.disabled=false;return;}
+    produtosListaML.length=0; $("previa-lista-mercado-livre").replaceChildren();
     let encontrados=0, falhas=0;
     for(let i=0;i<validos.length;i++){
       statusImportacaoLista("Consultando anúncio "+(i+1)+" de "+validos.length+"...");
