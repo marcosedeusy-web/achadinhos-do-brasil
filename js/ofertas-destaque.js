@@ -36,11 +36,8 @@
     origens.forEach(secao => {
         new MutationObserver(atualizarDestaques).observe(secao, {
             childList: true,
-            subtree: true,
-            attributes: true,
-            attributeFilter: ["class", "hidden"]
+            subtree: true
         });
     });
     window.addEventListener("produtos-atualizados", atualizarDestaques);
-    window.addEventListener("filtros-alterados", atualizarDestaques);
 })();
