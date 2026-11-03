@@ -24,7 +24,7 @@
     const link=$("link").value.trim();
     if(!link) return $("busca-status").textContent="Cole primeiro o link do anúncio.";
     if($("plataforma").value!=="Mercado Livre") return $("busca-status").textContent="Selecione Mercado Livre para buscar os dados.";
-    const match=link.match(/\\b(MLB-?\\d{6,})\\b/i);
+    const match=link.match(/\b(MLB-?\d{6,})\b/i);
     if(!match) return $("busca-status").textContent="Não encontrei o código MLB. Links curtos meli.la não permitem identificar o anúncio automaticamente; use o link completo do produto.";
     const itemId=match[1].toUpperCase().replace("-","");
     const button=$("buscar-mercado-livre");
@@ -50,7 +50,9 @@
     const id=$("product-id").value;
     const row={nome:$("nome").value.trim(),descricao:$("descricao").value.trim(),preco:$("preco").value===""?null:Number($("preco").value),link_afiliado:$("link").value.trim(),plataforma:$("plataforma").value,ativo:$("ativo").checked};
     if(!/^https:\/\//i.test(row.link_afiliado))return message("Informe um link de afiliado seguro (https://).",true);
-    const file=$("imagem").files[0];\n    const imageUrl=$("imagem-url").value.trim();\n    if(imageUrl && !/^https:\\/\\//i.test(imageUrl))return message("A URL da foto deve começar com https://.",true);
+    const file=$("imagem").files[0];
+    const imageUrl=$("imagem-url").value.trim();
+    if(imageUrl && !/^https:\\/\\//i.test(imageUrl))return message("A URL da foto deve começar com https://.",true);
     if(file){
       const tiposPermitidos=["image/jpeg","image/png","image/webp","image/gif"];
       if(!tiposPermitidos.includes(file.type))return message("Formato de imagem não permitido. Use JPG, PNG, WEBP ou GIF.",true);
@@ -65,7 +67,8 @@
       const upload=await client.storage.from("produtos").upload(path,file,{upsert:false});
       if(upload.error)return message("Erro ao enviar imagem: "+upload.error.message,true);
       row.imagem_url=client.storage.from("produtos").getPublicUrl(path).data.publicUrl;
-    } else if(imageUrl) row.imagem_url=imageUrl;\n    else if(!id) row.imagem_url=null;
+    } else if(imageUrl) row.imagem_url=imageUrl;
+    else if(!id) row.imagem_url=null;
     const saved=id?await client.from("produtos").update(row).eq("id",id):await client.from("produtos").insert(row);
     if(saved.error)return message("Erro ao salvar: "+saved.error.message,true);
     if(file&&oldImage){const marker="/storage/v1/object/public/produtos/";const at=oldImage.indexOf(marker);if(at>=0)await client.storage.from("produtos").remove([decodeURIComponent(oldImage.slice(at+marker.length))]);}
