@@ -29,6 +29,25 @@
 
 <main class="container">
 
+    <section class="filtros-vitrine" aria-label="Buscar e filtrar produtos">
+        <label class="busca-produtos">
+            <span>Buscar produtos</span>
+            <input id="busca-produtos" type="search" placeholder="Digite o nome do produto..." autocomplete="off">
+        </label>
+        <label class="categoria-produtos">
+            <span>Filtrar por categoria</span>
+            <select id="categoria-produtos">
+                <option value="todos">Todas as categorias</option>
+                <option value="eletronicos">Eletrônicos</option>
+                <option value="casa">Casa e cozinha</option>
+                <option value="beleza">Beleza e cuidados</option>
+                <option value="moda">Moda e acessórios</option>
+                <option value="outros">Outros achadinhos</option>
+            </select>
+        </label>
+        <p id="resultado-filtros" aria-live="polite">Encontre seu próximo achadinho.</p>
+    </section>
+
     <h2 class="titulo titulo-shopee">Achadinhos da Shopee</h2>
 
     <section class="produtos">
