@@ -40,39 +40,22 @@
     const lookupLink=productLink||affiliateLink;
     const button=$("buscar-mercado-livre");
     button.disabled=true;
-    $("busca-status").textContent="Identificando o anúncio...";
-    try{
-      let itemId=(lookupLink.match(/\b(MLB-?\d{6,})\b/i)||[])[1];
-      let metadata=null;
-      if(!itemId){
-        const previewResponse=await fetch("https://api.microlink.io/?url="+encodeURIComponent(lookupLink),{headers:{"Accept":"application/json"}});
-        if(!previewResponse.ok) throw new Error("Não foi possível expandir esse endereço. Cole o link completo da página do produto.");
-        const preview=await previewResponse.json();
-        metadata=preview.data||null;
-        const resolvedUrl=metadata?.url||metadata?.publisher?.url||"";
-        itemId=(resolvedUrl.match(/\b(MLB-?\d{6,})\b/i)||[])[1];
-        if(metadata?.title) $("nome").value=metadata.title;
-        const image=metadata?.image?.url||metadata?.logo?.url;
-        if(image) $("imagem-url").value=image.replace(/^http:/i,"https:");
-        const price=metadata?.price;
-        if(price!=null && Number.isFinite(Number(price))) $("preco").value=Number(price).toFixed(2);
-        if(!itemId && !metadata?.title) throw new Error("Não consegui identificar o anúncio. Confira o endereço da página do produto.");
-      }
-      if(itemId){
-        itemId=itemId.toUpperCase().replace("-","");
-        const response=await fetch("https://api.mercadolibre.com/items/"+encodeURIComponent(itemId),{headers:{"Accept":"application/json"}});
-        if(!response.ok) throw new Error(response.status===404?"Anúncio não encontrado ou indisponível.":"O Mercado Livre não liberou a consulta do anúncio agora.");
-        const item=await response.json();
-        if(!item.title) throw new Error("O anúncio não retornou um título.");
-        $("nome").value=item.title;
-        if(item.price!=null) $("preco").value=Number(item.price).toFixed(2);
-        const picture=item.pictures?.[0]?.secure_url||item.pictures?.[0]?.url||item.secure_thumbnail||item.thumbnail;
-        if(picture) $("imagem-url").value=picture.replace(/^http:/i,"https:");
-      }
-      $("busca-status").textContent="Dados localizados. Confira nome, preço e foto. Seu link de afiliado continua no campo original.";
-    }catch(error){
-      $("busca-status").textContent=(error.message||"Falha na consulta.")+" O link de afiliado não foi alterado; você pode completar os dados manualmente.";
-    }finally{button.disabled=false;}
+    $("busca-status").textContent="Consultando os dados públicos do anúncio...";
+    try {
+      const {data,error}=await client.functions.invoke("mercado-livre-dados",{body:{url:lookupLink}});
+      if(error) throw new Error(error.message||"Não foi possível chamar a função do Supabase.");
+      if(!data?.success) throw new Error(data?.error||"O anúncio não forneceu dados públicos.");
+      const item=data.data||{};
+      if(item.nome) $("nome").value=item.nome;
+      if(item.descricao) $("descricao").value=item.descricao;
+      if(item.preco!=null) $("preco").value=Number(item.preco).toFixed(2);
+      if(item.imagem) $("imagem-url").value=item.imagem;
+      $("busca-status").textContent="Dados encontrados. Confira os campos antes de salvar. Seu link de afiliado foi preservado.";
+    } catch(error) {
+      $("busca-status").textContent=(error.message||"Falha na consulta.")+" O link de afiliado não foi alterado.";
+    } finally {
+      button.disabled=false;
+    }
   });
   $("cancel-button").addEventListener("click",reset);
   form.addEventListener("submit",async e=>{
