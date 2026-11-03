@@ -1,0 +1,1 @@
+Extensão do Chrome para importar produtos da lista de recomendações do Mercado Livre. Instale em chrome://extensions com Modo do desenvolvedor > Carregar sem compactação. Leia o arquivo de instruções incluído no pacote ZIP.
