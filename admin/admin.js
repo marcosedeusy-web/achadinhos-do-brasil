@@ -33,29 +33,30 @@
     }
   });
   $("buscar-mercado-livre").addEventListener("click", async () => {
-    const link=$("link").value.trim();
-    if(!link) return $("busca-status").textContent="Cole primeiro o link do anúncio.";
+    const affiliateLink=$("link").value.trim();
+    const productLink=$("anuncio-url").value.trim();
+    if(!affiliateLink) return $("busca-status").textContent="Cole primeiro seu link oficial de afiliado no campo próprio.";
     if($("plataforma").value!=="Mercado Livre") return $("busca-status").textContent="Selecione Mercado Livre para buscar os dados.";
+    const lookupLink=productLink||affiliateLink;
     const button=$("buscar-mercado-livre");
     button.disabled=true;
     $("busca-status").textContent="Identificando o anúncio...";
     try{
-      let itemId=(link.match(/\b(MLB-?\d{6,})\b/i)||[])[1];
+      let itemId=(lookupLink.match(/\b(MLB-?\d{6,})\b/i)||[])[1];
       let metadata=null;
       if(!itemId){
-        // O encurtador meli.la não expõe o MLB no texto do link. Tenta obter os metadados públicos da página.
-        const previewResponse=await fetch("https://api.microlink.io/?url="+encodeURIComponent(link),{headers:{"Accept":"application/json"}});
-        if(!previewResponse.ok) throw new Error("Não foi possível expandir o link curto agora.");
+        const previewResponse=await fetch("https://api.microlink.io/?url="+encodeURIComponent(lookupLink),{headers:{"Accept":"application/json"}});
+        if(!previewResponse.ok) throw new Error("Não foi possível expandir esse endereço. Cole o link completo da página do produto.");
         const preview=await previewResponse.json();
         metadata=preview.data||null;
         const resolvedUrl=metadata?.url||metadata?.publisher?.url||"";
         itemId=(resolvedUrl.match(/\b(MLB-?\d{6,})\b/i)||[])[1];
-        if(!itemId && !metadata?.title) throw new Error("O link curto não retornou dados públicos suficientes. Tente abrir o anúncio no Mercado Livre e copiar o endereço completo.");
         if(metadata?.title) $("nome").value=metadata.title;
         const image=metadata?.image?.url||metadata?.logo?.url;
         if(image) $("imagem-url").value=image.replace(/^http:/i,"https:");
         const price=metadata?.price;
         if(price!=null && Number.isFinite(Number(price))) $("preco").value=Number(price).toFixed(2);
+        if(!itemId && !metadata?.title) throw new Error("Não consegui identificar o anúncio. Confira o endereço da página do produto.");
       }
       if(itemId){
         itemId=itemId.toUpperCase().replace("-","");
@@ -68,13 +69,9 @@
         const picture=item.pictures?.[0]?.secure_url||item.pictures?.[0]?.url||item.secure_thumbnail||item.thumbnail;
         if(picture) $("imagem-url").value=picture.replace(/^http:/i,"https:");
       }
-      if($("nome").value.trim() && $("imagem-url").value.trim()){
-        $("busca-status").textContent="Dados localizados. Confira nome, preço e foto antes de salvar.";
-      } else {
-        $("busca-status").textContent="Conseguimos consultar parte dos dados. Confira os campos e complete o que faltar.";
-      }
+      $("busca-status").textContent="Dados localizados. Confira nome, preço e foto. Seu link de afiliado continua no campo original.";
     }catch(error){
-      $("busca-status").textContent=(error.message||"Falha na consulta.")+" Você ainda pode preencher os campos manualmente; o link de afiliado será preservado.";
+      $("busca-status").textContent=(error.message||"Falha na consulta.")+" O link de afiliado não foi alterado; você pode completar os dados manualmente.";
     }finally{button.disabled=false;}
   });
   $("cancel-button").addEventListener("click",reset);
