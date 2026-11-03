@@ -61,7 +61,7 @@
     e.preventDefault();
     if(!currentUser||currentUser.id!==ADMIN_ID)return message("Acesso não autorizado.",true);
     const id=$("product-id").value;
-    const row={nome:$("nome").value.trim(),descricao:$("descricao").value.trim(),preco:$("preco").value===""?null:Number($("preco").value),link_afiliado:$("link").value.trim(),plataforma:$("plataforma").value,ativo:$("ativo").checked};
+    const row={nome:$("nome").value.trim(),descricao:$("descricao").value.trim(),preco:$("preco").value===""?null:Number($("preco").value),link_afiliado:$("link").value.trim(),plataforma:$("plataforma").value,categoria:$("categoria").value,ativo:$("ativo").checked};
     if(!/^https:\/\//i.test(row.link_afiliado))return message("Informe um link de afiliado seguro (https://).",true);
     const file=$("imagem").files[0];
     const imageUrl=$("imagem-url").value.trim();
@@ -91,13 +91,13 @@
   $("import-old-products").addEventListener("click", async () => {
     if (!currentUser || currentUser.id !== ADMIN_ID) return message("Acesso não autorizado.", true);
     const antigos = [
-      {nome:"Mini Power Bank Portátil",descricao:"Carregador portátil compacto. Confira as capacidades, cores e conexões disponíveis no anúncio.",preco:31.99,plataforma:"Shopee",link_afiliado:"https://s.shopee.com.br/30p7lRG6Ku",imagem_url:"https://marcosedeusy-web.github.io/achadinhos-do-brasil/imagens/foto1.jpg"},
-      {nome:"Kit Body Splash Árabe Shakan",descricao:"Fragrâncias variadas em frascos de 60 ml. Confira as opções individuais e os kits disponíveis.",preco:14.89,plataforma:"Shopee",link_afiliado:"https://s.shopee.com.br/40hexzGWHO",imagem_url:"https://marcosedeusy-web.github.io/achadinhos-do-brasil/imagens/foto2.webp"},
-      {nome:"Fone de Ouvido Bluetooth 760BT",descricao:"Fone sem fio com microfone, formato over-ear e diferentes opções de cores.",preco:38.55,plataforma:"Shopee",link_afiliado:"https://s.shopee.com.br/2gCHMwwXTq",imagem_url:"https://marcosedeusy-web.github.io/achadinhos-do-brasil/imagens/foto3.webp"},
-      {nome:"Árvore de Natal 1,50 m — 400 Galhos",descricao:"Árvore verde desmontável para decorar casas, lojas e escritórios. Opções com pé de ferro ou plástico.",preco:79.99,plataforma:"Shopee",link_afiliado:"https://s.shopee.com.br/30p7lbUPuf",imagem_url:"https://marcosedeusy-web.github.io/achadinhos-do-brasil/imagens/foto4.jpg"},
-      {nome:"Cartão de memória para armazenamento",descricao:"Uma opção para guardar fotos, vídeos e arquivos. Confira no anúncio a capacidade, a compatibilidade e a velocidade do modelo antes de comprar.",preco:null,plataforma:"Mercado Livre",link_afiliado:"https://meli.la/33aiKNy",imagem_url:"https://marcosedeusy-web.github.io/achadinhos-do-brasil/imagens/cartao4.webp"},
-      {nome:"Escova para uso diário",descricao:"Confira no anúncio o tipo de escova, os materiais e a indicação de uso para escolher a opção adequada.",preco:null,plataforma:"Mercado Livre",link_afiliado:"https://meli.la/1zQtbNw",imagem_url:"https://marcosedeusy-web.github.io/achadinhos-do-brasil/imagens/escova5.webp"},
-      {nome:"Fone de ouvido sem fio",descricao:"Ouça músicas e acompanhe chamadas sem a conexão de cabo. Consulte no anúncio a autonomia da bateria, a compatibilidade e os recursos do modelo.",preco:null,plataforma:"Mercado Livre",link_afiliado:"https://meli.la/1JUVTrJ",imagem_url:"https://marcosedeusy-web.github.io/achadinhos-do-brasil/imagens/fone6.webp"}
+      {nome:"Mini Power Bank Portátil",categoria:"eletronicos",descricao:"Carregador portátil compacto. Confira as capacidades, cores e conexões disponíveis no anúncio.",preco:31.99,plataforma:"Shopee",link_afiliado:"https://s.shopee.com.br/30p7lRG6Ku",imagem_url:"https://marcosedeusy-web.github.io/achadinhos-do-brasil/imagens/foto1.jpg"},
+      {nome:"Kit Body Splash Árabe Shakan",categoria:"beleza",descricao:"Fragrâncias variadas em frascos de 60 ml. Confira as opções individuais e os kits disponíveis.",preco:14.89,plataforma:"Shopee",link_afiliado:"https://s.shopee.com.br/40hexzGWHO",imagem_url:"https://marcosedeusy-web.github.io/achadinhos-do-brasil/imagens/foto2.webp"},
+      {nome:"Fone de Ouvido Bluetooth 760BT",categoria:"eletronicos",descricao:"Fone sem fio com microfone, formato over-ear e diferentes opções de cores.",preco:38.55,plataforma:"Shopee",link_afiliado:"https://s.shopee.com.br/2gCHMwwXTq",imagem_url:"https://marcosedeusy-web.github.io/achadinhos-do-brasil/imagens/foto3.webp"},
+      {nome:"Árvore de Natal 1,50 m — 400 Galhos",categoria:"casa",descricao:"Árvore verde desmontável para decorar casas, lojas e escritórios. Opções com pé de ferro ou plástico.",preco:79.99,plataforma:"Shopee",link_afiliado:"https://s.shopee.com.br/30p7lbUPuf",imagem_url:"https://marcosedeusy-web.github.io/achadinhos-do-brasil/imagens/foto4.jpg"},
+      {nome:"Cartão de memória para armazenamento",categoria:"eletronicos",descricao:"Uma opção para guardar fotos, vídeos e arquivos. Confira no anúncio a capacidade, a compatibilidade e a velocidade do modelo antes de comprar.",preco:null,plataforma:"Mercado Livre",link_afiliado:"https://meli.la/33aiKNy",imagem_url:"https://marcosedeusy-web.github.io/achadinhos-do-brasil/imagens/cartao4.webp"},
+      {nome:"Escova para uso diário",categoria:"outros",descricao:"Confira no anúncio o tipo de escova, os materiais e a indicação de uso para escolher a opção adequada.",preco:null,plataforma:"Mercado Livre",link_afiliado:"https://meli.la/1zQtbNw",imagem_url:"https://marcosedeusy-web.github.io/achadinhos-do-brasil/imagens/escova5.webp"},
+      {nome:"Fone de ouvido sem fio",categoria:"eletronicos",descricao:"Ouça músicas e acompanhe chamadas sem a conexão de cabo. Consulte no anúncio a autonomia da bateria, a compatibilidade e os recursos do modelo.",preco:null,plataforma:"Mercado Livre",link_afiliado:"https://meli.la/1JUVTrJ",imagem_url:"https://marcosedeusy-web.github.io/achadinhos-do-brasil/imagens/fone6.webp"}
     ];
     const button = $("import-old-products");
     button.disabled = true;
@@ -131,11 +131,11 @@
       const card=document.createElement("article");card.className="produto";
       const img=document.createElement("img");img.src=p.imagem_url||"";img.alt=p.nome;
       const info=document.createElement("div"),title=document.createElement("h3"),desc=document.createElement("p");
-      title.textContent=p.nome;desc.textContent=p.plataforma+" · "+(p.ativo?"Ativo":"Inativo")+(p.preco==null?"":" · R$ "+Number(p.preco).toFixed(2).replace(".",","));
+      title.textContent=p.nome;desc.textContent=p.plataforma+" · "+(p.categoria||"outros")+" · "+(p.ativo?"Ativo":"Inativo")+(p.preco==null?"":" · R$ "+Number(p.preco).toFixed(2).replace(".",","));
       info.append(title,desc);
       const actions=document.createElement("div");actions.className="produto-acoes";
       const edit=document.createElement("button");edit.type="button";edit.textContent="Editar";
-      edit.addEventListener("click",()=>{$("product-id").value=p.id;$("nome").value=p.nome||"";$("descricao").value=p.descricao||"";$("preco").value=p.preco??"";$("link").value=p.link_afiliado||"";$("plataforma").value=p.plataforma||"Shopee";$("ativo").checked=!!p.ativo;$("imagem-url").value=p.imagem_url||"";$("save-button").textContent="Atualizar produto";$("cancel-button").hidden=false;window.scrollTo({top:0,behavior:"smooth"});});
+      edit.addEventListener("click",()=>{$("product-id").value=p.id;$("nome").value=p.nome||"";$("descricao").value=p.descricao||"";$("preco").value=p.preco??"";$("link").value=p.link_afiliado||"";$("plataforma").value=p.plataforma||"Shopee";$("categoria").value=p.categoria||"outros";$("ativo").checked=!!p.ativo;$("imagem-url").value=p.imagem_url||"";$("save-button").textContent="Atualizar produto";$("cancel-button").hidden=false;window.scrollTo({top:0,behavior:"smooth"});});
       const del=document.createElement("button");del.type="button";del.className="secundario";del.textContent="Excluir";
       del.addEventListener("click",async()=>{if(!confirm("Deseja excluir este produto?"))return;const r=await client.from("produtos").delete().eq("id",p.id);if(r.error)return message("Erro ao excluir: "+r.error.message,true);message("Produto excluído.");loadProducts();});
       actions.append(edit,del);card.append(img,info,actions);list.append(card);
