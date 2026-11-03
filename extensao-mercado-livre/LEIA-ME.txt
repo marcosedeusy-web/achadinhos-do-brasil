@@ -1,1 +1,26 @@
-Extensão do Chrome para importar produtos da lista de recomendações do Mercado Livre. Instale em chrome://extensions com Modo do desenvolvedor > Carregar sem compactação. Leia o arquivo de instruções incluído no pacote ZIP.
+ACHADINHOS DO BRASIL — IMPORTADOR DO MERCADO LIVRE
+
+INSTALAÇÃO NO CHROME (somente no computador administrador)
+1. Baixe o ZIP da extensão disponibilizado nesta conversa e extraia a pasta.
+2. Abra chrome://extensions
+3. Ative Modo do desenvolvedor.
+4. Clique em Carregar sem compactação.
+5. Selecione a pasta achadinhos-ml-extension.
+
+USO
+1. Entre na sua conta de afiliado do Mercado Livre.
+2. Abra Minhas recomendações no endereço myaccount.mercadolivre.com.br.
+3. Clique em “1. Capturar esta página”.
+4. Repita nas páginas 2 e 3, se existirem.
+5. Clique em “2. Gerar links e enviar”.
+6. Faça login no painel Achadinhos do Brasil.
+7. Clique em “3. Carregar links no painel”.
+8. Confira a prévia e clique em “Cadastrar selecionados”.
+
+PRIVACIDADE E LIMITAÇÕES
+- A extensão não solicita nem lê sua senha e não copia cookies.
+- Ela usa sua sessão já autenticada do Mercado Livre.
+- Os visitantes do Achadinhos não precisam instalar nada.
+- A publicação só ocorre após sua confirmação no painel.
+- A geração usa endpoints internos do Mercado Livre, não documentados publicamente e sujeitos a alterações.
+- A extensão captura os anúncios carregados em cada página; capture cada página da lista.
