@@ -10,3 +10,15 @@
 .importacao-antigos{margin:20px 0 24px;padding:20px;border:2px solid #00833f;border-radius:12px;background:#f5faf6}.importacao-antigos h2{margin:0 0 6px}.importacao-antigos p{margin:0 0 12px}.botao-importar{background:#1769aa}.botao-importar:hover{background:#12558b}
 
 .ajuda-link{font-size:13px;margin:7px 0;color:#536057}.ajuda-link a{color:#1769aa;font-weight:bold;text-decoration:underline}
+
+
+/* Importação em lote do Mercado Livre */
+.importacao-lista{display:block;margin:24px 0;padding:20px;border:2px solid #00833f;border-radius:12px;background:#f5faf6}
+.importacao-lista h2{margin:0 0 6px}
+.importacao-lista p{margin:0 0 12px}
+.importacao-lista textarea{min-height:120px;resize:vertical}
+.acoes-importacao-lista{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.acoes-importacao-lista button:disabled{opacity:.55;cursor:not-allowed}
+.importacao-lista .produto input[type="checkbox"]{width:auto;min-width:20px;margin:0 8px 10px 0}
+.importacao-lista .produto select{min-width:170px}
+@media(max-width:620px){.acoes-importacao-lista button{width:100%}.importacao-lista .produto{grid-template-columns:60px minmax(0,1fr)}.importacao-lista .produto>div:last-child{grid-column:1/-1}}
