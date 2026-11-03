@@ -5,6 +5,13 @@
   let currentUser = null;
   const login = $("login-section"), app = $("app-section"), form = $("product-form");
   function message(text, error=false) { $("status").textContent=text; $("status").className=error?"status erro":"status sucesso"; }
+  const nomesCategorias = {
+    pets:"Pets, cães e gatos", eletronicos:"Eletrônicos", eletrodomesticos:"Eletrodomésticos",
+    informatica:"Informática e acessórios", casa:"Casa e cozinha", beleza:"Beleza e cuidados pessoais",
+    moda:"Moda e acessórios", acessorios:"Acessórios pessoais", auto_acessorios:"Acessórios automotivos",
+    automotivos:"Peças e manutenção automotiva", ferramentas:"Ferramentas", brinquedos:"Brinquedos e jogos",
+    esportes:"Esportes e lazer", papelaria:"Papelaria e escritório", saude:"Saúde e bem-estar", outros:"Outros achadinhos"
+  };
   function display(user) {
     currentUser=user;
     const allowed=!!user && user.id===ADMIN_ID;
@@ -131,7 +138,7 @@
       const card=document.createElement("article");card.className="produto";
       const img=document.createElement("img");img.src=p.imagem_url||"";img.alt=p.nome;
       const info=document.createElement("div"),title=document.createElement("h3"),desc=document.createElement("p");
-      title.textContent=p.nome;desc.textContent=p.plataforma+" · "+(p.categoria||"outros")+" · "+(p.ativo?"Ativo":"Inativo")+(p.preco==null?"":" · R$ "+Number(p.preco).toFixed(2).replace(".",","));
+      title.textContent=p.nome;desc.textContent=p.plataforma+" · "+(nomesCategorias[p.categoria]||"Outros achadinhos")+" · "+(p.ativo?"Ativo":"Inativo")+(p.preco==null?"":" · R$ "+Number(p.preco).toFixed(2).replace(".",","));
       info.append(title,desc);
       const actions=document.createElement("div");actions.className="produto-acoes";
       const edit=document.createElement("button");edit.type="button";edit.textContent="Editar";
