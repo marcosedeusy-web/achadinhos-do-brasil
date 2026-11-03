@@ -557,3 +557,45 @@ footer {
     background: #006b35;
     color: #ffffff;
 }
+
+
+/* Seção de ofertas em destaque */
+.destaques {
+    max-width: 1200px;
+    margin: 28px auto 8px;
+    padding: 28px 20px;
+    background: linear-gradient(135deg, #ffffff, #edf7ef);
+    border: 1px solid #d7e8da;
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(0, 77, 41, 0.07);
+}
+.destaques-cabecalho { text-align: center; margin-bottom: 22px; }
+.destaques-cabecalho .selo-destaque {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #ffdf00;
+    color: #174b2d;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .4px;
+}
+.destaques-cabecalho h2 {
+    margin: 10px 0 7px;
+    color: #006b35;
+    font-size: clamp(22px, 3vw, 30px);
+}
+.destaques-cabecalho p { color: #5b6b60; font-size: 14px; }
+.produtos-destaque {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+}
+.produtos-destaque .produto { min-width: 0; }
+@media (max-width: 900px) {
+    .destaques { margin: 20px 12px 8px; padding: 22px 14px; }
+    .produtos-destaque { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+}
+@media (max-width: 420px) {
+    .produtos-destaque { gap: 9px; }
+}
