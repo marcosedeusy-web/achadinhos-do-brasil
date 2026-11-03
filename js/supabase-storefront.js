@@ -32,7 +32,7 @@
             const consulta = await Promise.race([
                 client
                     .from("produtos")
-                    .select("id,nome,descricao,preco,imagem_url,link_afiliado,plataforma")
+                    .select("id,nome,descricao,preco,imagem_url,link_afiliado,plataforma,categoria")
                     .eq("ativo", true)
                     .order("criado_em", { ascending: false }),
                 new Promise((_, reject) => setTimeout(() => reject(new Error("Tempo de conexão esgotado")), 12000))
@@ -67,6 +67,7 @@
             const card = document.createElement("article");
             const loja = String(produto.plataforma || "").toLowerCase();
             card.className = "produto " + (loja.includes("mercado") ? "produto-mercado-livre" : "produto-shopee");
+            card.dataset.categoria = produto.categoria || "outros";
 
             if (produto.imagem_url) {
                 const imagem = document.createElement("img");
