@@ -33,6 +33,8 @@
                 const correspondeCategoria = selecionada === "todos" || identificarCategoria(card) === selecionada;
                 const visivel = correspondeTexto && correspondeCategoria;
                 card.classList.toggle("filtro-oculto", !visivel);
+                if (!visivel) card.hidden = true;
+                else if (card.hidden && !card.classList.contains("filtro-oculto")) card.hidden = false;
                 if (visivel) encontrados++;
             });
         });
@@ -46,5 +48,8 @@
     busca.addEventListener("input", aplicarFiltros);
     categoria.addEventListener("change", aplicarFiltros);
     window.addEventListener("produtos-atualizados", aplicarFiltros);
+    secoes.forEach(secao => {
+        new MutationObserver(() => aplicarFiltros()).observe(secao, { childList: true });
+    });
     aplicarFiltros();
 })();
