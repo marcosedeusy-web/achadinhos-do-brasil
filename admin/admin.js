@@ -34,10 +34,9 @@
   });
   $("buscar-mercado-livre").addEventListener("click", async () => {
     const affiliateLink=$("link").value.trim();
-    const productLink=$("anuncio-url").value.trim();
     if(!affiliateLink) return $("busca-status").textContent="Cole primeiro seu link oficial de afiliado no campo próprio.";
     if($("plataforma").value!=="Mercado Livre") return $("busca-status").textContent="Selecione Mercado Livre para buscar os dados.";
-    const lookupLink=productLink||affiliateLink;
+    const lookupLink=affiliateLink;
     const button=$("buscar-mercado-livre");
     button.disabled=true;
     $("busca-status").textContent="Consultando os dados públicos do anúncio...";
