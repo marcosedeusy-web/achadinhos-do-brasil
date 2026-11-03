@@ -534,3 +534,26 @@ footer {
     .filtros-vitrine { grid-template-columns: 1fr; padding: 15px; gap: 12px; }
     #resultado-filtros { grid-column: 1; }
 }
+
+
+/* Botão para compartilhar ofertas */
+.produto .botao-compartilhar {
+    order: 7;
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    padding: 10px 12px;
+    border: 1px solid #006b35;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #006b35;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease;
+}
+.produto .botao-compartilhar:hover {
+    background: #006b35;
+    color: #ffffff;
+}
