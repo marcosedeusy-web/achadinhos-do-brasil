@@ -608,3 +608,12 @@ footer {
 .produtos-destaque .produto-mercado-livre > a:not(.imagem-produto-link):hover {
     background: #e6cf00;
 }
+
+/* Cor do Mercado Livre nos botões da seção de destaques */
+.destaques .produtos-destaque a.botao-mercado-livre {
+    background: #ffe600 !important;
+    color: #222222 !important;
+}
+.destaques .produtos-destaque a.botao-mercado-livre:hover {
+    background: #e6cf00 !important;
+}
