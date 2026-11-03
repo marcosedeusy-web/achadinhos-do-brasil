@@ -2,18 +2,21 @@
 const produtosMercadoLivre = [
     {
         nome: "Cartão de memória para armazenamento",
+        categoria: "eletronicos",
         descricao: "Uma opção para guardar fotos, vídeos e arquivos. Confira no anúncio a capacidade, a compatibilidade e a velocidade do modelo antes de comprar.",
         imagem: "imagens/cartao4.webp",
         link: "https://meli.la/33aiKNy"
     },
     {
         nome: "Escova para uso diário",
+        categoria: "outros",
         descricao: "Confira no anúncio o tipo de escova, os materiais e a indicação de uso para escolher a opção adequada.",
         imagem: "imagens/escova5.webp",
         link: "https://meli.la/1zQtbNw"
     },
     {
         nome: "Fone de ouvido sem fio",
+        categoria: "eletronicos",
         descricao: "Ouça músicas e acompanhe chamadas sem a conexão de cabo. Consulte no anúncio a autonomia da bateria, a compatibilidade e os recursos do modelo.",
         imagem: "imagens/fone6.webp",
         link: "https://meli.la/1JUVTrJ"
@@ -26,6 +29,7 @@ if (areaProdutos) {
     produtosMercadoLivre.forEach((produto) => {
         const card = document.createElement("article");
         card.className = "produto";
+        card.dataset.categoria = produto.categoria || "outros";
 
         const imagem = document.createElement("img");
         imagem.src = produto.imagem;
