@@ -128,11 +128,11 @@
     if(!currentUser||currentUser.id!==ADMIN_ID)return message("Acesso não autorizado.",true);
     const raw=$("lista-links-mercado-livre").value.trim();
     const urls=[...new Set((raw.match(/https?:\/\/[^\s<>"']+/gi)||[]).map(u=>u.replace(/[),.;]+$/,"")))];
-    let validos=urls.filter(u=>/^https:\\/\\/(?:meli\.la|www\\.mercadolivre\.com\\.br|mercadolivre\.com\\.br)\\//i.test(u));
+    let validos=urls.filter(u=>/^https:\/\/(?:meli\.la|www\.mercadolivre\.com\.br|mercadolivre\.com\.br)\//i.test(u));
     if(!validos.length)return statusImportacaoLista("Cole o link da lista de recomendações ou links de produtos do Mercado Livre.",true);
     const botao=$("analisar-lista-mercado-livre");botao.disabled=true;
     try {
-      if(validos.length===1 && /(?:mercadolivre\.com\\.br\/social\/|meli\.la\\/)/i.test(validos[0])) {
+      if(validos.length===1 && /(?:mercadolivre\.com\.br\/social\/|meli\.la\/)/i.test(validos[0])) {
         statusImportacaoLista("Lendo sua lista de recomendações do Mercado Livre...");
         const {data,error}=await client.functions.invoke("mercado-livre-lista",{body:{url:validos[0]}});
         if(error)throw new Error(error.message||"Não foi possível ler a lista.");
