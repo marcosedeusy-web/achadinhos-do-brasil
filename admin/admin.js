@@ -20,6 +20,18 @@
   });
   $("logout-button").addEventListener("click",async()=>{await client.auth.signOut();currentUser=null;app.hidden=true;login.hidden=false;message("Você saiu do painel.");});
   function reset(){form.reset();$("product-id").value="";$("ativo").checked=true;$("save-button").textContent="Salvar produto";$("cancel-button").hidden=true;$("busca-status").textContent="Para anúncios com código MLB no link.";}
+  $("colar-link").addEventListener("click", async () => {
+    try {
+      if(!navigator.clipboard || !navigator.clipboard.readText) throw new Error("Seu navegador não liberou o acesso à área de transferência.");
+      const copied=await navigator.clipboard.readText();
+      if(!copied.trim()) throw new Error("A área de transferência está vazia. Copie o link novamente.");
+      $("link").value=copied.trim();
+      $("link").dispatchEvent(new Event("input",{bubbles:true}));
+      $("busca-status").textContent="Link colado. Agora você pode buscar os dados do anúncio.";
+    } catch(error) {
+      $("busca-status").textContent=(error.message||"Não foi possível ler o link.")+" Use Ctrl + V ou permita o acesso à área de transferência.";
+    }
+  });
   $("buscar-mercado-livre").addEventListener("click", async () => {
     const link=$("link").value.trim();
     if(!link) return $("busca-status").textContent="Cole primeiro o link do anúncio.";
