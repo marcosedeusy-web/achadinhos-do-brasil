@@ -11,8 +11,8 @@
       const urls = [...new Set([...document.querySelectorAll("a[href]")].map(a => {
         try {
           const u=new URL(a.href,location.href);
-          if (!/(^|\\.)mercadolivre\\.com\\.br$/i.test(u.hostname) || u.protocol!=="https:") return null;
-          if (!(/\\/p\\/MLB\\d{6,}|\\/MLB-?\\d{6,}/i.test(u.pathname) || /[?&]wid=MLB\\d{6,}/i.test(u.href))) return null;
+          if (!/(^|\.)mercadolivre\.com\.br$/i.test(u.hostname) || u.protocol!=="https:") return null;
+          if (!(/\/p\/MLB\d{6,}|\/MLB-?\d{6,}/i.test(u.pathname) || /[?&]wid=MLB\d{6,}/i.test(u.href))) return null;
           u.hash=""; return u.toString();
         } catch { return null; }
       }).filter(Boolean))];
@@ -42,7 +42,7 @@
       const field=document.getElementById("lista-links-mercado-livre"), analyze=document.getElementById("analisar-lista-mercado-livre");
       if (!field || !analyze) {status.textContent="Faça login no painel e tente novamente.";return;}
       if (!(x.achadinhosPendingLinks||[]).length) {status.textContent="Nenhum link pendente. Capture os produtos no Mercado Livre.";return;}
-      field.value=x.achadinhosPendingLinks.join("\\n"); field.dispatchEvent(new Event("input",{bubbles:true})); analyze.click();
+      field.value=x.achadinhosPendingLinks.join("\n"); field.dispatchEvent(new Event("input",{bubbles:true})); analyze.click();
       status.textContent=x.achadinhosPendingLinks.length+" links enviados para análise. Confira a prévia e clique em Cadastrar selecionados.";
     });
   }
