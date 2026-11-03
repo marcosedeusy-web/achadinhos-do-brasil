@@ -18,8 +18,11 @@
     function identificarCategoria(card) {
         const texto = normalizar(card.innerText || card.textContent);
 
+        // Itens natalinos nunca pertencem à categoria Pets.
+        if (/arvore de natal|pisca pisca|enfeite natalino|decoracao de natal/.test(texto)) return "casa";
+
         // Pets: inclui areia, ração, higiene e acessórios para animais.
-        if (/areia para gatos|areia higienica|granulado higienico|racao|petisco|brinquedo para (cao|cachorro|gato)|cama para (cao|cachorro|gato)|coleira|guia para cachorro|arranhador|tapete higienico|comedouro|bebedouro|pet shop|\\bpet\\b|\\bpets\\b|cao|cachorro|gato|gatinho|cachorrinho/.test(texto)) return "pets";
+        if (/areia para gatos|areia higienica|granulado higienico|racao|petisco|brinquedo para (cao|cachorro|gato)|cama para (cao|cachorro|gato)|coleira|guia para cachorro|arranhador|tapete higienico|comedouro|bebedouro|pet shop|\bpet\b|\bpets\b|cao|cachorro|gato|gatinho|cachorrinho/.test(texto)) return "pets";
 
         // Ferramentas e materiais para reparos.
         if (/furadeira|parafusadeira|chave de fenda|chave philips|alicate|martelo|serra|broca|trena|ferramenta|kit ferramentas|nivelador|solda/.test(texto)) return "ferramentas";
