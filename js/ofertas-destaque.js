@@ -2,29 +2,41 @@
     const destino = document.getElementById("produtos-destaque");
     if (!destino) return;
 
-    const origens = [
-        document.querySelector(".titulo-shopee + .produtos"),
-        document.getElementById("produtos-mercado-livre"),
-        document.getElementById("produtos-painel-online")
-    ].filter(Boolean);
+    const shopee = document.querySelector(".titulo-shopee + .produtos");
+    const mercadoLivre = document.getElementById("produtos-mercado-livre");
+    const outros = document.getElementById("produtos-painel-online");
+    const origens = [shopee, mercadoLivre, outros].filter(Boolean);
+
+    function listar(secao) {
+        if (!secao) return [];
+        return Array.from(secao.querySelectorAll(":scope > .produto"))
+            .filter(card => !card.classList.contains("filtro-oculto"));
+    }
 
     function atualizarDestaques() {
-        const produtos = [];
-        origens.forEach(secao => {
-            secao.querySelectorAll(":scope > .produto").forEach(card => {
-                if (!card.classList.contains("filtro-oculto") && produtos.length < 4) {
-                    produtos.push(card);
+        const selecionados = [
+            ...listar(shopee).slice(0, 2),
+            ...listar(mercadoLivre).slice(0, 2)
+        ];
+
+        if (selecionados.length < 4) {
+            const jaSelecionados = new Set(selecionados);
+            for (const card of [...listar(shopee), ...listar(mercadoLivre), ...listar(outros)]) {
+                if (!jaSelecionados.has(card)) {
+                    selecionados.push(card);
+                    jaSelecionados.add(card);
+                    if (selecionados.length === 4) break;
                 }
-            });
-        });
+            }
+        }
 
         destino.replaceChildren();
-        if (!produtos.length) {
+        if (!selecionados.length) {
             destino.innerHTML = "<p>Em breve, novos achadinhos em destaque por aqui!</p>";
             return;
         }
 
-        produtos.forEach(card => {
+        selecionados.forEach(card => {
             const copia = card.cloneNode(true);
             copia.classList.remove("filtro-oculto");
             copia.hidden = false;
