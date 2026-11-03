@@ -12,18 +12,47 @@
     automotivos:"Peças e manutenção automotiva", ferramentas:"Ferramentas", brinquedos:"Brinquedos e jogos",
     esportes:"Esportes e lazer", papelaria:"Papelaria e escritório", saude:"Saúde e bem-estar", outros:"Outros achadinhos"
   };
+  function loginMessage(text, error=false) {
+    const el=$("login-status");
+    el.textContent=text;
+    el.className=error?"status erro":"status sucesso";
+  }
+  $("toggle-password").addEventListener("click",()=>{
+    const input=$("password");
+    const showing=input.type==="text";
+    input.type=showing?"password":"text";
+    $("toggle-password").textContent=showing?"👁️":"🙈";
+    $("toggle-password").setAttribute("aria-label",showing?"Mostrar senha":"Ocultar senha");
+    $("toggle-password").setAttribute("aria-pressed",String(!showing));
+  });
   function display(user) {
     currentUser=user;
     const allowed=!!user && user.id===ADMIN_ID;
     login.hidden=allowed; app.hidden=!allowed;
-    if(user&&!allowed){client.auth.signOut();message("Esta conta não está autorizada a administrar os produtos.",true);}
+    if(user&&!allowed){
+      client.auth.signOut();
+      loginMessage("A senha foi aceita, mas esta conta não está autorizada no painel. É necessário conferir o ID do administrador configurado.",true);
+    }
     if(allowed) loadProducts();
   }
   $("login-form").addEventListener("submit",async e=>{
-    e.preventDefault(); message("Entrando...");
-    const {data,error}=await client.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});
-    if(error)return message("Não foi possível entrar: "+error.message,true);
-    display(data.user);
+    e.preventDefault();
+    const submit=$("login-form").querySelector('button[type="submit"]');
+    submit.disabled=true;
+    loginMessage("Verificando e-mail e senha...");
+    try {
+      const {data,error}=await client.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});
+      if(error){
+        const detail=error.message||"Erro não identificado";
+        loginMessage("O Supabase recusou o acesso: "+detail,true);
+        return;
+      }
+      display(data.user);
+    } catch(err) {
+      loginMessage("Não foi possível verificar o acesso. Confira sua conexão e tente novamente.",true);
+    } finally {
+      submit.disabled=false;
+    }
   });
   $("logout-button").addEventListener("click",async()=>{await client.auth.signOut();currentUser=null;app.hidden=true;login.hidden=false;message("Você saiu do painel.");});
   function reset(){form.reset();$("product-id").value="";$("ativo").checked=true;$("save-button").textContent="Salvar produto";$("cancel-button").hidden=true;$("busca-status").textContent="Para anúncios com código MLB no link.";}
