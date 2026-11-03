@@ -50,7 +50,7 @@
     const id=$("product-id").value;
     const row={nome:$("nome").value.trim(),descricao:$("descricao").value.trim(),preco:$("preco").value===""?null:Number($("preco").value),link_afiliado:$("link").value.trim(),plataforma:$("plataforma").value,ativo:$("ativo").checked};
     if(!/^https:\/\//i.test(row.link_afiliado))return message("Informe um link de afiliado seguro (https://).",true);
-    const file=$("imagem").files[0];
+    const file=$("imagem").files[0];\n    const imageUrl=$("imagem-url").value.trim();\n    if(imageUrl && !/^https:\\/\\//i.test(imageUrl))return message("A URL da foto deve começar com https://.",true);
     if(file){
       const tiposPermitidos=["image/jpeg","image/png","image/webp","image/gif"];
       if(!tiposPermitidos.includes(file.type))return message("Formato de imagem não permitido. Use JPG, PNG, WEBP ou GIF.",true);
