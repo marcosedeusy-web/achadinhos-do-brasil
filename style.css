@@ -489,3 +489,48 @@ footer {
 #produtos-painel-online .produto-mercado-livre > a:not(.imagem-produto-link) {
     order: 5;
 }
+
+
+/* Busca e categorias da vitrine */
+.filtros-vitrine {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr);
+    gap: 14px;
+    align-items: end;
+    margin: 0 0 30px;
+    padding: 20px;
+    background: #ffffff;
+    border: 1px solid #dce8df;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 77, 41, 0.06);
+}
+.filtros-vitrine label { display: flex; flex-direction: column; gap: 7px; }
+.filtros-vitrine label span { color: #006b35; font-size: 14px; font-weight: bold; }
+.filtros-vitrine input,
+.filtros-vitrine select {
+    width: 100%;
+    min-height: 46px;
+    padding: 10px 12px;
+    border: 1px solid #cbd8ce;
+    border-radius: 8px;
+    background: #fff;
+    color: #202820;
+    font: inherit;
+}
+.filtros-vitrine input:focus,
+.filtros-vitrine select:focus {
+    outline: 2px solid #009b50;
+    outline-offset: 2px;
+    border-color: #006b35;
+}
+#resultado-filtros {
+    grid-column: 1 / -1;
+    color: #5b6b60;
+    font-size: 13px;
+    margin: 0;
+}
+.produto.filtro-oculto { display: none !important; }
+@media (max-width: 600px) {
+    .filtros-vitrine { grid-template-columns: 1fr; padding: 15px; gap: 12px; }
+    #resultado-filtros { grid-column: 1; }
+}
