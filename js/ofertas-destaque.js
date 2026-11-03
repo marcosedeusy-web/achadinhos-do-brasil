@@ -39,9 +39,12 @@
         selecionados.forEach(card => {
             const copia = card.cloneNode(true);
             copia.classList.remove("filtro-oculto");
-            if (mercadoLivre && mercadoLivre.contains(card)) {
-                copia.classList.add("produto-mercado-livre");
-            }
+            const botaoOferta = copia.querySelectorAll("a:not(.imagem-produto-link)");
+            botaoOferta.forEach(link => {
+                if (link.textContent.toLowerCase().includes("mercado livre")) {
+                    link.classList.add("botao-mercado-livre");
+                }
+            });
             copia.hidden = false;
             destino.appendChild(copia);
         });
