@@ -63,6 +63,91 @@
       button.disabled=false;
     }
   });
+
+  // Importação em lote por links de afiliado individuais do Mercado Livre.
+  const produtosListaML = [];
+  const categoriasImportacao = [
+    ["outros","Outros achadinhos"],["pets","Pets, cães e gatos"],["eletronicos","Eletrônicos"],
+    ["eletrodomesticos","Eletrodomésticos"],["informatica","Informática e acessórios"],
+    ["auto_acessorios","Acessórios automotivos"],["acessorios","Acessórios pessoais"],
+    ["papelaria","Papelaria e escritório"],["saude","Saúde e bem-estar"],["casa","Casa e cozinha"],
+    ["beleza","Beleza e cuidados pessoais"],["moda","Moda e acessórios"],["ferramentas","Ferramentas"],
+    ["automotivos","Peças e manutenção automotiva"],["brinquedos","Brinquedos e jogos"],["esportes","Esportes e lazer"]
+  ];
+  function statusImportacaoLista(texto, erro=false) {
+    const el=$("status-lista-mercado-livre"); el.textContent=texto; el.style.color=erro?"#b42318":"";
+  }
+  function renderizarPreviaLista() {
+    const destino=$("previa-lista-mercado-livre"); destino.replaceChildren();
+    produtosListaML.forEach((item,index)=>{
+      const card=document.createElement("article"); card.className="produto";
+      const check=document.createElement("input"); check.type="checkbox"; check.checked=item.selecionado; check.setAttribute("aria-label","Selecionar "+item.nome);
+      check.addEventListener("change",()=>{item.selecionado=check.checked; $("cadastrar-lista-mercado-livre").disabled=!produtosListaML.some(p=>p.selecionado);});
+      const img=document.createElement("img"); img.src=item.imagem||""; img.alt=item.nome; img.style.maxWidth="90px"; img.style.maxHeight="90px"; img.style.objectFit="contain";
+      const info=document.createElement("div"),title=document.createElement("h3"),desc=document.createElement("p");
+      title.textContent=item.nome; desc.textContent=item.erro||((item.preco==null?"Preço não identificado":"R$ "+Number(item.preco).toFixed(2).replace(".",","))+" · "+item.link);
+      info.append(title,desc);
+      const cat=document.createElement("select"); cat.setAttribute("aria-label","Categoria de "+item.nome);
+      categoriasImportacao.forEach(([value,label])=>{const op=document.createElement("option");op.value=value;op.textContent=label;cat.append(op);});
+      cat.value=item.categoria||"outros"; cat.addEventListener("change",()=>item.categoria=cat.value);
+      const area=document.createElement("div"); area.append(check,cat);
+      card.append(img,info,area); destino.append(card);
+    });
+    $("cadastrar-lista-mercado-livre").disabled=!produtosListaML.some(p=>p.selecionado&&!p.erro);
+  }
+  $("analisar-lista-mercado-livre").addEventListener("click",async()=>{
+    if(!currentUser||currentUser.id!==ADMIN_ID)return message("Acesso não autorizado.",true);
+    const raw=$("lista-links-mercado-livre").value;
+    const urls=[...new Set((raw.match(/https?:\\/\\/[^\\s<>"']+/gi)||[]).map(u=>u.replace(/[),.;]+$/,"")))];
+    const validos=urls.filter(u=>/^https:\\/\\/(?:meli\\.la|www\\.mercadolivre\\.com\\.br|mercadolivre\\.com\\.br)\\//i.test(u));
+    if(!validos.length)return statusImportacaoLista("Cole links de produtos do Mercado Livre, um por linha. Use links de afiliado para manter sua comissão.",true);
+    if(validos.length>40)return statusImportacaoLista("Analise no máximo 40 links por vez.",true);
+    produtosListaML.length=0; $("previa-lista-mercado-livre").replaceChildren();
+    const botao=$("analisar-lista-mercado-livre");botao.disabled=true;
+    let encontrados=0, falhas=0;
+    for(let i=0;i<validos.length;i++){
+      statusImportacaoLista("Consultando anúncio "+(i+1)+" de "+validos.length+"...");
+      try{
+        const {data,error}=await client.functions.invoke("mercado-livre-dados",{body:{url:validos[i]}});
+        if(error)throw new Error(error.message||"Falha ao consultar anúncio.");
+        if(!data?.success)throw new Error(data?.error||"O anúncio não forneceu dados públicos.");
+        const item=data.data||{};
+        if(!item.nome)throw new Error("O anúncio não informou o nome do produto.");
+        produtosListaML.push({nome:String(item.nome).slice(0,180),descricao:String(item.descricao||"Produto do Mercado Livre. Confira detalhes, opções e condições no anúncio.").slice(0,3000),preco:item.preco==null?null:Number(item.preco),imagem:item.imagem||"",link:validos[i],categoria:"outros",selecionado:true,erro:""});
+        encontrados++;
+      }catch(error){
+        produtosListaML.push({nome:"Link "+(i+1)+" não consultado",descricao:"",preco:null,imagem:"",link:validos[i],categoria:"outros",selecionado:false,erro:error.message||"Não foi possível consultar este anúncio."});
+        falhas++;
+      }
+      renderizarPreviaLista();
+    }
+    statusImportacaoLista(encontrados+" anúncio(s) com dados encontrados"+(falhas?"; "+falhas+" link(s) não puderam ser consultados.":"")+". Confira a prévia e desmarque o que não deseja cadastrar.");
+    botao.disabled=false;
+  });
+  $("cadastrar-lista-mercado-livre").addEventListener("click",async()=>{
+    if(!currentUser||currentUser.id!==ADMIN_ID)return message("Acesso não autorizado.",true);
+    const escolhidos=produtosListaML.filter(p=>p.selecionado&&!p.erro);
+    if(!escolhidos.length)return statusImportacaoLista("Selecione pelo menos um produto válido.",true);
+    const botao=$("cadastrar-lista-mercado-livre");botao.disabled=true;
+    try{
+      statusImportacaoLista("Verificando produtos já cadastrados...");
+      const existing=await client.from("produtos").select("link_afiliado");
+      if(existing.error)throw existing.error;
+      const links=new Set((existing.data||[]).map(p=>p.link_afiliado));
+      const novos=escolhidos.filter(p=>!links.has(p.link)).map(p=>({
+        nome:p.nome,descricao:p.descricao,preco:p.preco,link_afiliado:p.link,
+        plataforma:"Mercado Livre",categoria:p.categoria||"outros",ativo:true,imagem_url:p.imagem||null
+      }));
+      if(!novos.length){statusImportacaoLista("Todos os produtos selecionados já estão cadastrados. Nenhuma cópia foi criada.");return;}
+      const saved=await client.from("produtos").insert(novos);
+      if(saved.error)throw saved.error;
+      statusImportacaoLista(novos.length+" produto(s) do Mercado Livre cadastrado(s). Os links duplicados foram ignorados.");
+      $("lista-links-mercado-livre").value="";produtosListaML.length=0;$("previa-lista-mercado-livre").replaceChildren();
+      await loadProducts();
+    }catch(error){statusImportacaoLista("Não foi possível cadastrar: "+(error.message||"erro desconhecido"),true);}
+    finally{botao.disabled=false;}
+  });
+
   $("cancel-button").addEventListener("click",reset);
   form.addEventListener("submit",async e=>{
     e.preventDefault();
