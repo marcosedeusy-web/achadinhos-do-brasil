@@ -36,23 +36,45 @@
     const link=$("link").value.trim();
     if(!link) return $("busca-status").textContent="Cole primeiro o link do anúncio.";
     if($("plataforma").value!=="Mercado Livre") return $("busca-status").textContent="Selecione Mercado Livre para buscar os dados.";
-    const match=link.match(/\b(MLB-?\d{6,})\b/i);
-    if(!match) return $("busca-status").textContent="Não encontrei o código MLB. Links curtos meli.la não permitem identificar o anúncio automaticamente; use o link completo do produto.";
-    const itemId=match[1].toUpperCase().replace("-","");
     const button=$("buscar-mercado-livre");
-    button.disabled=true;$("busca-status").textContent="Consultando dados públicos do anúncio...";
+    button.disabled=true;
+    $("busca-status").textContent="Identificando o anúncio...";
     try{
-      const response=await fetch("https://api.mercadolibre.com/items/"+encodeURIComponent(itemId),{headers:{"Accept":"application/json"}});
-      if(!response.ok) throw new Error(response.status===404?"Anúncio não encontrado ou indisponível.":"O Mercado Livre não liberou a consulta agora.");
-      const item=await response.json();
-      if(!item.title) throw new Error("O anúncio não retornou um título.");
-      $("nome").value=item.title;
-      if(item.price!=null) $("preco").value=Number(item.price).toFixed(2);
-      const picture=item.pictures?.[0]?.secure_url||item.pictures?.[0]?.url||item.secure_thumbnail||item.thumbnail;
-      if(picture) $("imagem-url").value=picture.replace(/^http:/i,"https:");
-      $("busca-status").textContent="Dados encontrados. Confira nome, preço e foto antes de salvar.";
+      let itemId=(link.match(/\b(MLB-?\d{6,})\b/i)||[])[1];
+      let metadata=null;
+      if(!itemId){
+        // O encurtador meli.la não expõe o MLB no texto do link. Tenta obter os metadados públicos da página.
+        const previewResponse=await fetch("https://api.microlink.io/?url="+encodeURIComponent(link),{headers:{"Accept":"application/json"}});
+        if(!previewResponse.ok) throw new Error("Não foi possível expandir o link curto agora.");
+        const preview=await previewResponse.json();
+        metadata=preview.data||null;
+        const resolvedUrl=metadata?.url||metadata?.publisher?.url||"";
+        itemId=(resolvedUrl.match(/\b(MLB-?\d{6,})\b/i)||[])[1];
+        if(!itemId && !metadata?.title) throw new Error("O link curto não retornou dados públicos suficientes. Tente abrir o anúncio no Mercado Livre e copiar o endereço completo.");
+        if(metadata?.title) $("nome").value=metadata.title;
+        const image=metadata?.image?.url||metadata?.logo?.url;
+        if(image) $("imagem-url").value=image.replace(/^http:/i,"https:");
+        const price=metadata?.price;
+        if(price!=null && Number.isFinite(Number(price))) $("preco").value=Number(price).toFixed(2);
+      }
+      if(itemId){
+        itemId=itemId.toUpperCase().replace("-","");
+        const response=await fetch("https://api.mercadolibre.com/items/"+encodeURIComponent(itemId),{headers:{"Accept":"application/json"}});
+        if(!response.ok) throw new Error(response.status===404?"Anúncio não encontrado ou indisponível.":"O Mercado Livre não liberou a consulta do anúncio agora.");
+        const item=await response.json();
+        if(!item.title) throw new Error("O anúncio não retornou um título.");
+        $("nome").value=item.title;
+        if(item.price!=null) $("preco").value=Number(item.price).toFixed(2);
+        const picture=item.pictures?.[0]?.secure_url||item.pictures?.[0]?.url||item.secure_thumbnail||item.thumbnail;
+        if(picture) $("imagem-url").value=picture.replace(/^http:/i,"https:");
+      }
+      if($("nome").value.trim() && $("imagem-url").value.trim()){
+        $("busca-status").textContent="Dados localizados. Confira nome, preço e foto antes de salvar.";
+      } else {
+        $("busca-status").textContent="Conseguimos consultar parte dos dados. Confira os campos e complete o que faltar.";
+      }
     }catch(error){
-      $("busca-status").textContent=(error.message||"Falha na consulta.")+" Você pode preencher os campos manualmente.";
+      $("busca-status").textContent=(error.message||"Falha na consulta.")+" Você ainda pode preencher os campos manualmente; o link de afiliado será preservado.";
     }finally{button.disabled=false;}
   });
   $("cancel-button").addEventListener("click",reset);
