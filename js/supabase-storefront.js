@@ -107,6 +107,8 @@
             if (produto.link_afiliado) {
                 const link = document.createElement("a");
                 link.href = produto.link_afiliado;
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
                 link.textContent = loja.includes("mercado") ? "🛒 Ver Ofertas do Mercado Livre" : loja.includes("shopee") ? "🛒 Ver Ofertas da Shopee" : "🛒 Ver oferta";
                 card.appendChild(link);
             }
