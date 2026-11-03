@@ -39,6 +39,9 @@
         selecionados.forEach(card => {
             const copia = card.cloneNode(true);
             copia.classList.remove("filtro-oculto");
+            if (mercadoLivre && mercadoLivre.contains(card)) {
+                copia.classList.add("produto-mercado-livre");
+            }
             copia.hidden = false;
             destino.appendChild(copia);
         });
