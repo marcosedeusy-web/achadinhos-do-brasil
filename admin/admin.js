@@ -19,7 +19,30 @@
     display(data.user);
   });
   $("logout-button").addEventListener("click",async()=>{await client.auth.signOut();currentUser=null;app.hidden=true;login.hidden=false;message("Você saiu do painel.");});
-  function reset(){form.reset();$("product-id").value="";$("ativo").checked=true;$("save-button").textContent="Salvar produto";$("cancel-button").hidden=true;}
+  function reset(){form.reset();$("product-id").value="";$("ativo").checked=true;$("save-button").textContent="Salvar produto";$("cancel-button").hidden=true;$("busca-status").textContent="Para anúncios com código MLB no link.";}
+  $("buscar-mercado-livre").addEventListener("click", async () => {
+    const link=$("link").value.trim();
+    if(!link) return $("busca-status").textContent="Cole primeiro o link do anúncio.";
+    if($("plataforma").value!=="Mercado Livre") return $("busca-status").textContent="Selecione Mercado Livre para buscar os dados.";
+    const match=link.match(/\\b(MLB-?\\d{6,})\\b/i);
+    if(!match) return $("busca-status").textContent="Não encontrei o código MLB. Links curtos meli.la não permitem identificar o anúncio automaticamente; use o link completo do produto.";
+    const itemId=match[1].toUpperCase().replace("-","");
+    const button=$("buscar-mercado-livre");
+    button.disabled=true;$("busca-status").textContent="Consultando dados públicos do anúncio...";
+    try{
+      const response=await fetch("https://api.mercadolibre.com/items/"+encodeURIComponent(itemId),{headers:{"Accept":"application/json"}});
+      if(!response.ok) throw new Error(response.status===404?"Anúncio não encontrado ou indisponível.":"O Mercado Livre não liberou a consulta agora.");
+      const item=await response.json();
+      if(!item.title) throw new Error("O anúncio não retornou um título.");
+      $("nome").value=item.title;
+      if(item.price!=null) $("preco").value=Number(item.price).toFixed(2);
+      const picture=item.pictures?.[0]?.secure_url||item.pictures?.[0]?.url||item.secure_thumbnail||item.thumbnail;
+      if(picture) $("imagem-url").value=picture.replace(/^http:/i,"https:");
+      $("busca-status").textContent="Dados encontrados. Confira nome, preço e foto antes de salvar.";
+    }catch(error){
+      $("busca-status").textContent=(error.message||"Falha na consulta.")+" Você pode preencher os campos manualmente.";
+    }finally{button.disabled=false;}
+  });
   $("cancel-button").addEventListener("click",reset);
   form.addEventListener("submit",async e=>{
     e.preventDefault();
@@ -42,7 +65,7 @@
       const upload=await client.storage.from("produtos").upload(path,file,{upsert:false});
       if(upload.error)return message("Erro ao enviar imagem: "+upload.error.message,true);
       row.imagem_url=client.storage.from("produtos").getPublicUrl(path).data.publicUrl;
-    } else if(!id) row.imagem_url=null;
+    } else if(imageUrl) row.imagem_url=imageUrl;\n    else if(!id) row.imagem_url=null;
     const saved=id?await client.from("produtos").update(row).eq("id",id):await client.from("produtos").insert(row);
     if(saved.error)return message("Erro ao salvar: "+saved.error.message,true);
     if(file&&oldImage){const marker="/storage/v1/object/public/produtos/";const at=oldImage.indexOf(marker);if(at>=0)await client.storage.from("produtos").remove([decodeURIComponent(oldImage.slice(at+marker.length))]);}
@@ -96,7 +119,7 @@
       info.append(title,desc);
       const actions=document.createElement("div");actions.className="produto-acoes";
       const edit=document.createElement("button");edit.type="button";edit.textContent="Editar";
-      edit.addEventListener("click",()=>{$("product-id").value=p.id;$("nome").value=p.nome||"";$("descricao").value=p.descricao||"";$("preco").value=p.preco??"";$("link").value=p.link_afiliado||"";$("plataforma").value=p.plataforma||"Shopee";$("ativo").checked=!!p.ativo;$("save-button").textContent="Atualizar produto";$("cancel-button").hidden=false;window.scrollTo({top:0,behavior:"smooth"});});
+      edit.addEventListener("click",()=>{$("product-id").value=p.id;$("nome").value=p.nome||"";$("descricao").value=p.descricao||"";$("preco").value=p.preco??"";$("link").value=p.link_afiliado||"";$("plataforma").value=p.plataforma||"Shopee";$("ativo").checked=!!p.ativo;$("imagem-url").value=p.imagem_url||"";$("save-button").textContent="Atualizar produto";$("cancel-button").hidden=false;window.scrollTo({top:0,behavior:"smooth"});});
       const del=document.createElement("button");del.type="button";del.className="secundario";del.textContent="Excluir";
       del.addEventListener("click",async()=>{if(!confirm("Deseja excluir este produto?"))return;const r=await client.from("produtos").delete().eq("id",p.id);if(r.error)return message("Erro ao excluir: "+r.error.message,true);message("Produto excluído.");loadProducts();});
       actions.append(edit,del);card.append(img,info,actions);list.append(card);
