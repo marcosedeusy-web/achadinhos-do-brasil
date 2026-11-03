@@ -2,24 +2,12 @@
   "manifest_version": 3,
   "name": "Achadinhos do Brasil - Importador Mercado Livre",
   "version": "1.0.0",
-  "description": "Captura produtos da sua lista de recomendações, gera links pelo serviço de afiliados do Mercado Livre e prepara a importação no Achadinhos do Brasil.",
+  "description": "Captura produtos da lista de recomendações e prepara a importação no Achadinhos.",
   "permissions": ["storage"],
-  "host_permissions": [
-    "https://myaccount.mercadolivre.com.br/*",
-    "https://www.mercadolivre.com.br/*",
-    "https://marcosedeusy-web.github.io/achadinhos-do-brasil/*"
-  ],
-  "background": { "service_worker": "service-worker.js" },
+  "host_permissions": ["https://myaccount.mercadolivre.com.br/*","https://www.mercadolivre.com.br/*","https://marcosedeusy-web.github.io/achadinhos-do-brasil/*"],
+  "background": {"service_worker": "service-worker.js"},
   "content_scripts": [
-    {
-      "matches": ["https://myaccount.mercadolivre.com.br/bookmarks/wishlist/*"],
-      "js": ["content.js"],
-      "run_at": "document_idle"
-    },
-    {
-      "matches": ["https://marcosedeusy-web.github.io/achadinhos-do-brasil/admin/*"],
-      "js": ["content.js"],
-      "run_at": "document_idle"
-    }
+    {"matches": ["https://myaccount.mercadolivre.com.br/bookmarks/wishlist/*"], "js": ["content.js"], "run_at": "document_idle"},
+    {"matches": ["https://marcosedeusy-web.github.io/achadinhos-do-brasil/admin/*"], "js": ["content.js"], "run_at": "document_idle"}
   ]
 }
