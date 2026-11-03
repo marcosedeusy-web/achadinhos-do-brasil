@@ -599,3 +599,12 @@ footer {
 @media (max-width: 420px) {
     .produtos-destaque { gap: 9px; }
 }
+
+/* Botão amarelo do Mercado Livre também nos cartões em destaque */
+.produtos-destaque .produto-mercado-livre > a:not(.imagem-produto-link) {
+    background: #ffe600;
+    color: #222222;
+}
+.produtos-destaque .produto-mercado-livre > a:not(.imagem-produto-link):hover {
+    background: #e6cf00;
+}
